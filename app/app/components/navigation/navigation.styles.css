@@ -1,3 +1,8 @@
 .navText {
   color: #000;
+
+  &:hover {
+    color: #878787; /* Change to your desired hover color */
+    scale: 1.05; /* Slightly enlarge on hover */
+  }
 }

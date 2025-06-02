@@ -1,0 +1,45 @@
+.background-letters {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allows clicks to pass through */
+  z-index: 0;
+}
+
+.bg-letter {
+  position: absolute;
+  font-size: 20vw; /* Responsive size */
+  color: rgba(0, 0, 0, 26%); /* Very light, faded look */
+  font-weight: bold;
+  user-select: none;
+}
+
+/* Example positions for each letter */
+.letter-a {
+  top: 5%;
+  right: -4%;
+  rotate: 43deg;
+}
+.letter-d {
+  top: 64%;
+  left: 23%;
+  rotate: -25deg;
+}
+.letter-v {
+  top: 44%;
+  rotate: -20deg;
+  left: -3%;
+}
+.letter-i {
+  top: -20%;
+  left: -1%;
+  rotate: -25deg;
+}
+.letter-k {
+  top: 60%;
+  left: 75%;
+  rotate: 57deg;
+}
+/* Adjust positions as you like */

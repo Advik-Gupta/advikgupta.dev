@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #ffffff;
+  overflow-x: hidden;
 }
 
 @theme inline {

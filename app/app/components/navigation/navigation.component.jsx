@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Menu } from "lucide-react";
 import gsap from "gsap";
 
 import "./navigation.styles.css";
@@ -52,7 +51,7 @@ export default function Navbar() {
         ease: "power3.out",
       });
       gsap.to(contactButtonRef.current, {
-        y: "-100%",
+        // y: "-100%",
         opacity: 0,
         duration: 0.3,
         ease: "power3.out",
@@ -71,7 +70,7 @@ export default function Navbar() {
         ease: "power3.out",
       });
       gsap.to(contactButtonRef.current, {
-        y: "0%",
+        // y: "0%",
         opacity: 1,
         duration: 0.3,
         ease: "power3.out",
@@ -86,19 +85,22 @@ export default function Navbar() {
   }, [isScrollingUp, isScrollingDown]);
 
   return (
-    <nav className={`w-full h-1/10 px-8 sm:px-16 py-4 mt-7 fixed`} ref={navRef}>
+    <nav className={`w-full h-1/10 px-8 sm:px-16 py-4 mt-4 fixed`} ref={navRef}>
       <div
         ref={navSubmenuRef}
         className="w-full rounded-[2rem] bg-white flex items-center justify-between px-8 py-4"
       >
         {/* Left Navigation Links */}
-        <div ref={navLinksRef} className="flex space-x-8 text-lg font-medium">
+        <div
+          ref={navLinksRef}
+          className="navLinks flex space-x-8 text-lg font-medium"
+        >
           <a href="#journey" className="navText hover:text-gray-600 transition">
             My Journey
           </a>
           <a
             href="#projects"
-            className=" navText hover:text-gray-600 transition"
+            className="navText hover:text-gray-600 transition"
           >
             Projects
           </a>
@@ -111,7 +113,7 @@ export default function Navbar() {
         <div className="flex items-center space-x-4">
           <button
             ref={contactButtonRef}
-            className="bg-black text-white px-6 py-3 rounded-full text-base font-medium hover:bg-gray-800 transition"
+            className="bg-black text-white px-6 py-3 rounded-full text-base font-medium transition hover:scale-105 transition-transform"
           >
             Contact Me
           </button>

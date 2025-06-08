@@ -95,6 +95,38 @@ export default function Hero() {
         duration: 0.5,
         ease: "power3.inOut",
       });
+      gsap.to(letterA.current, {
+        x: -1000,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterI.current, {
+        x: 2000,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterV.current, {
+        x: 500,
+        y: -800,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterD.current, {
+        y: -1000,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterK.current, {
+        x: -1000,
+        y: -1000,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.inOut",
+      });
     } else if (isScrollingUp) {
       gsap.to(heroTextAdvik.current, {
         x: 0,
@@ -106,6 +138,38 @@ export default function Hero() {
         x: 0,
         opacity: 1,
         duration: 0.5,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterA.current, {
+        x: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterI.current, {
+        x: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterV.current, {
+        x: 0,
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterD.current, {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.inOut",
+      });
+      gsap.to(letterK.current, {
+        x: 0,
+        y: 0,
+        opacity: 1,
+        duration: 1,
         ease: "power3.inOut",
       });
     }

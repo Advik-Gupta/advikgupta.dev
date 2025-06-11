@@ -198,7 +198,7 @@ export default function Hero() {
         className="flex flex-col items-center justify-center min-h-screen bg-white px-4 text-black text-center"
         style={{ margin: "50px" }}
       >
-        <p className="text-[1.75rem] font-semibold mb-1">Hi, I’m</p>
+        <p className="text-[1.75rem] font-semibold mb-1">Hi, Im</p>
         <h1
           className="text-[6rem] sm:text-[13rem] font-extrabold leading-none tracking-tight"
           style={{

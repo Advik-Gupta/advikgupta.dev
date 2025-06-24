@@ -76,8 +76,9 @@ export default function Navbar() {
         ease: "power3.out",
       });
       gsap.to(navSubmenuRef.current, {
-        background: "rgb(255, 255, 255/ 1)",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        background: "rgba(31, 31, 31, 0.152)", // subtle dark tint
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.054)", // soft shadow
+        backdropFilter: "blur(10px)", // frosted glass
         duration: 0.5,
         ease: "power3.out",
       });
@@ -85,10 +86,13 @@ export default function Navbar() {
   }, [isScrollingUp, isScrollingDown]);
 
   return (
-    <nav className={`w-full h-1/10 px-8 sm:px-16 py-4 mt-4 fixed`} ref={navRef}>
+    <nav
+      className="w-full h-1/10 px-8 sm:px-16 py-4 mt-4 fixed z-[9999]"
+      ref={navRef}
+    >
       <div
         ref={navSubmenuRef}
-        className="w-full rounded-[2rem] bg-white flex items-center justify-between px-8 py-4"
+        className="w-full rounded-[2rem] bg-gradient-to-r from-[#ff6a3d]/70 to-[#ffc93c]/70 backdrop-blur-xl shadow-xl flex items-center justify-between px-8 py-4"
       >
         {/* Left Navigation Links */}
         <div

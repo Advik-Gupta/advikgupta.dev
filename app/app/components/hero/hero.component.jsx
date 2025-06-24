@@ -195,7 +195,7 @@ export default function Hero() {
         </span>
       </div>
       <main
-        className="flex flex-col items-center justify-center min-h-screen bg-white px-4 text-black text-center"
+        className="flex flex-col items-center justify-center min-h-screen px-4 text-[#1f1f1f] text-center"
         style={{ margin: "50px" }}
       >
         <p className="text-[1.75rem] font-semibold mb-1">Hi, I'm</p>

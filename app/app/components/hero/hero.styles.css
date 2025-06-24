@@ -10,8 +10,8 @@
 
 .bg-letter {
   position: absolute;
-  font-size: 20vw; /* Responsive size */
-  color: rgba(0, 0, 0, 26%); /* Very light, faded look */
+  font-size: 20vw;
+  color: rgba(31, 31, 31, 0.15);
   font-weight: bold;
   user-select: none;
 }

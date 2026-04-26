@@ -1,0 +1,90 @@
+.hero {
+  min-height: 100vh;
+  background: #ede8df;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1rem;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.hero__name {
+  font-family: var(--font-bebas), "Anton", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+
+  white-space: nowrap;
+
+  font-size: clamp(4rem, 30vw, 25rem);
+}
+
+.hero__name span {
+  display: inline-block;
+}
+
+.hero__name .first {
+  margin-right: 1.5vw;
+}
+
+.hero__meta {
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: #7a7a7a;
+  text-transform: uppercase;
+
+  margin-top: 1rem;
+}
+
+.hero__role {
+  font-family: var(--font-bebas), "Anton", sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+
+  font-size: clamp(1.8rem, 5vw, 10rem);
+  margin-top: 3rem;
+}
+
+@media (max-width: 640px) {
+  .hero__content {
+    margin-top: 0;
+  }
+
+  .hero__name {
+    white-space: normal;
+    font-size: clamp(3rem, 45vw, 15rem);
+  }
+
+  .hero__name span {
+    display: block;
+  }
+
+  .hero__name .first {
+    margin-right: 0;
+  }
+
+  .hero__meta {
+    margin-top: 0.5rem;
+    font-size: 0.6rem;
+  }
+
+  .hero__role {
+    font-size: clamp(1.5rem, 16vw, 4rem);
+    margin-top: 2rem;
+    line-height: 3rem;
+    font-weight: 600;
+    text-wrap: wrap;
+  }
+}

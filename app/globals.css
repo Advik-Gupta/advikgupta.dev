@@ -3,6 +3,7 @@
 :root {
   --bg: #ede8df;
   --fg: hsl(0, 0%, 7%);
+  --accent: #ff7a2c;
 }
 
 :root {
@@ -11,21 +12,46 @@
   --font-archivo: "Archivo", system-ui, sans-serif;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  cursor: none !important;
 }
 
 html,
 body {
   background: var(--bg);
   color: var(--fg);
-  overflow-x: hidden;
   scroll-behavior: smooth;
+  cursor: none !important;
 }
 
 ::selection {
   background: #111;
   color: #ede8df;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e06520;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
 }

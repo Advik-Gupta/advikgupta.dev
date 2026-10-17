@@ -1,0 +1,138 @@
+.rj {
+  --rj-bg: #ede8df;
+  --rj-ink: #111;
+  --rj-accent: #ff7a2c;
+  --rj-card: #f6f2ea;
+  --rj-ghost: #ddd6c9;
+  --rj-display: var(--font-bebas, "Bebas Neue"), Impact, sans-serif;
+  --rj-body: var(--font-oswald, "Oswald"), system-ui, sans-serif;
+  position: relative;
+  container-type: inline-size;
+  color: var(--rj-ink);
+}
+
+.rj__road {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rj__asphalt {
+  fill: none;
+  stroke: #1a1a1a;
+  stroke-linecap: round;
+}
+
+.rj__asphalt--ghost {
+  stroke: var(--rj-ghost);
+}
+
+.rj__lines {
+  fill: none;
+  stroke: var(--rj-bg);
+  stroke-dasharray: 10 12;
+  stroke-linecap: round;
+}
+
+.rj__stops {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(5rem, 11vw, 9rem);
+  padding: 3rem 0 6rem;
+}
+
+.rj__stop {
+  width: min(40%, 30rem);
+}
+
+.rj__stop.is-left {
+  margin-left: 4%;
+}
+
+.rj__stop.is-right {
+  margin-left: auto;
+  margin-right: 4%;
+}
+
+.rj__card {
+  padding: clamp(1.1rem, 2.4vw, 1.8rem);
+  border-radius: 1.25rem;
+  background: var(--rj-card);
+  border: 1.5px solid transparent;
+  transition: border-color 0.5s ease;
+}
+
+.rj__stop.is-reached .rj__card {
+  border-color: var(--rj-ink);
+}
+
+.rj__kicker {
+  font-family: var(--rj-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #7a7a7a;
+  transition: color 0.4s ease;
+}
+
+.rj__stop.is-reached .rj__kicker {
+  color: var(--rj-accent);
+}
+
+.rj__title {
+  margin: 0.4rem 0 0;
+  font-family: var(--rj-display);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 900;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.rj__note {
+  margin: 0.5rem 0 0;
+  font-family: var(--rj-body);
+  font-weight: 300;
+  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+  line-height: 1.5;
+  color: #333;
+}
+
+.rj__car {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.rj__car svg {
+  position: absolute;
+  overflow: visible;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25));
+}
+
+@container (max-width: 640px) {
+  .rj__stops {
+    gap: 5rem;
+  }
+
+  .rj__stop {
+    width: 76%;
+  }
+
+  .rj__stop.is-left {
+    margin-left: 0;
+  }
+
+  .rj__stop.is-right {
+    margin-right: 0;
+  }
+}

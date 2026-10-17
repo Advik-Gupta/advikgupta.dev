@@ -19,7 +19,9 @@ import {
   useTransform,
   useVelocity,
 } from "framer-motion";
-import { cn } from "@/lib/utils";
+
+const cn = (...classes: (string | false | null | undefined)[]) =>
+  classes.filter(Boolean).join(" ");
 
 const wrap = (min: number, max: number, value: number): number => {
   const range = max - min;
@@ -130,41 +132,39 @@ function MarqueeItem({
     calculateZIndex(value),
   );
 
+  const itemRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     return itemOffset.on("change", (value: string) => {
       const match = value.match(/^([\d.]+)%$/);
-      if (match && match[1]) {
-        currentOffsetDistance.set(parseFloat(match[1]));
-      }
+      if (!match || !match[1]) return;
+      const distance = parseFloat(match[1]);
+      currentOffsetDistance.set(distance);
+      const el = itemRef.current;
+      if (!el) return;
+      cssVariableInterpolation.forEach(({ property, from, to }) => {
+        const a = Number(from);
+        const b = Number(to);
+        el.style.setProperty(property, String(a + ((b - a) * distance) / 100));
+      });
     });
-  }, [itemOffset, currentOffsetDistance]);
-
-  const cssVariables = Object.fromEntries(
-    cssVariableInterpolation.map(({ property, from, to }) => [
-      property,
-
-      useTransform(
-        currentOffsetDistance,
-        [0, 100],
-        [from as number, to as number],
-      ),
-    ]),
-  );
+  }, [itemOffset, currentOffsetDistance, cssVariableInterpolation]);
 
   return (
     <motion.div
+      ref={itemRef}
       key={itemKey}
-      className={cn(
-        "absolute top-0 left-0",
-        draggable && grabCursor && "cursor-grab",
-      )}
+      className="marquee-path__item"
       style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        cursor: draggable && grabCursor ? "grab" : undefined,
         offsetPath: `path('${path}')`,
         offsetDistance: itemOffset,
         zIndex: enableRollingZIndex ? zIndex : undefined,
         willChange: "offset-distance",
         backfaceVisibility: "hidden",
-        ...cssVariables,
       }}
       aria-hidden={repeatIndex > 0}
       onMouseEnter={onMouseEnter}
@@ -295,9 +295,9 @@ export default function MarqueeAlongSvgPath({
       return;
     }
 
-    isHovered.current
-      ? hoverFactorValue.set(slowdownOnHover ? slowDownFactor : 1)
-      : hoverFactorValue.set(1);
+    hoverFactorValue.set(
+      isHovered.current && slowdownOnHover ? slowDownFactor : 1,
+    );
 
     let moveBy =
       directionFactor.current *
@@ -366,12 +366,13 @@ export default function MarqueeAlongSvgPath({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
-      className={cn("relative", className)}
+      className={cn("marquee-path", className)}
+      style={{ position: "relative" }}
     >
       <div
         ref={marqueeContainerRef}
-        className="relative"
-        style={{ contain: "layout style" }}
+        className="marquee-path__inner"
+        style={{ position: "relative", contain: "layout style" }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -379,7 +380,7 @@ export default function MarqueeAlongSvgPath({
           height={height}
           viewBox={viewBox}
           preserveAspectRatio={preserveAspectRatio}
-          className="w-full h-full"
+          style={{ width: "100%", height: "100%" }}
         >
           <path
             id={id}

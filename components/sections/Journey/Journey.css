@@ -83,16 +83,28 @@
   stroke-dasharray: 3 3;
 }
 
-.journey__vehicles {
+.journey__rig {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
   z-index: 2;
-  overflow: visible;
   pointer-events: none;
+  will-change: transform;
+  contain: layout style;
 }
 
-.journey__vehicles > g {
+.journey__rig > svg {
+  position: absolute;
+  left: -45px;
+  top: -25px;
+  overflow: visible;
   filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25));
+}
+
+.journey__road {
+  contain: strict;
 }
 
 .journey__poof {
@@ -123,10 +135,14 @@
 }
 
 .journey__smoke {
-  fill: #d9d2c5;
+  position: absolute;
+  z-index: 2;
+  border-radius: 50%;
+  background: #d9d2c5;
   opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
+  transform: translate(-50%, -50%) scale(0.4);
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
 .journey__stops {

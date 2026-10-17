@@ -1,0 +1,128 @@
+.pl {
+  --pl-bg: #ede8df;
+  --pl-ink: #111;
+  --pl-accent: #ff7a2c;
+  --pl-display: var(--font-bebas, "Bebas Neue"), Impact, sans-serif;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--pl-bg);
+  color: var(--pl-ink);
+  container-type: size;
+  will-change: transform;
+}
+
+.pl--contained {
+  position: absolute;
+  z-index: 2;
+}
+
+.pl__center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.pl__lead {
+  overflow: hidden;
+  font-family: var(--pl-display);
+  font-size: clamp(1.4rem, 7cqi, 6rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.pl__lead-in {
+  display: inline-block;
+  transform: translateY(110%);
+}
+
+.pl__pill {
+  position: relative;
+  display: inline-grid;
+  overflow: hidden;
+  padding: 0.12em 0.22em 0;
+  border-radius: 0.15em;
+  background: var(--pl-accent);
+  color: #fff;
+  font-family: var(--pl-display);
+  font-size: clamp(2.2rem, 11cqi, 9rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transform: scaleX(0);
+}
+
+.pl__sizer {
+  visibility: hidden;
+}
+
+.pl__word {
+  position: absolute;
+  inset: 0.12em 0 0;
+  display: flex;
+  justify-content: center;
+  transform: translateY(110%);
+}
+
+.pl__photo {
+  position: absolute;
+  z-index: 1;
+  width: clamp(4.5rem, 16cqi, 12rem);
+  aspect-ratio: 4 / 3;
+  translate: -50% -50%;
+  overflow: hidden;
+  border: 4px solid #fbf8f2;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+}
+
+.pl__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pl__foot {
+  position: absolute;
+  right: clamp(0.9rem, 3cqi, 2.5rem);
+  bottom: clamp(0.9rem, 3cqi, 2rem);
+  z-index: 2;
+}
+
+.pl__num {
+  display: inline-flex;
+  align-items: flex-start;
+  font-family: var(--pl-display);
+  font-size: clamp(2.2rem, 9cqi, 8rem);
+  line-height: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+
+.pl__pct {
+  margin-left: 0.08em;
+  font-size: 0.35em;
+  color: var(--pl-accent);
+}
+
+.pl__bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--pl-accent);
+  transform-origin: left;
+  transform: scaleX(0);
+}

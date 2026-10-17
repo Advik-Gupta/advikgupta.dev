@@ -1,5 +1,5 @@
 import Image from "next/image";
-import MarqueeAlongSvgPath from "@/components/ui/MarqueeAlongSvgPath";
+import MarqueeAlongSvgPath from "@/components/freebies/WaveGallery/MarqueeAlongSvgPath";
 import MediaBetweenText from "@/components/ui/MediaBetweenText";
 import { PHOTOS } from "./photos";
 import "./Gallery.css";

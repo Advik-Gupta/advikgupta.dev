@@ -110,3 +110,37 @@
   text-transform: uppercase;
   color: #c9c4bb;
 }
+
+.nav__pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nav__page {
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(237, 232, 223, 0.3);
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bg);
+  transition:
+    background 0.3s var(--ease-out),
+    color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
+}
+
+.nav__page.is-current,
+.nav__page:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #111;
+}
+
+@media (max-width: 760px) {
+  .nav__page--desktop {
+    display: none;
+  }
+}

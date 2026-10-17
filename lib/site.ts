@@ -15,3 +15,10 @@ export const NAV_LINKS = [
   { label: "Toolbox", id: "toolbox" },
   { label: "Say hi", id: "contact" },
 ];
+
+export const PAGE_LINKS = [
+  { label: "Freebies", href: "/freebies" },
+  { label: "Projects", href: "/projects" },
+  { label: "Hackathons", href: "/hackathons" },
+  { label: "Blog", href: "/blog" },
+];

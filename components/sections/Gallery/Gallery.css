@@ -163,7 +163,7 @@
     margin: 0;
   }
 
-  .gallery .relative {
+  .gallery .marquee-path__inner {
     margin-top: -10rem;
   }
 }

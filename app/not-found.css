@@ -1,0 +1,238 @@
+.lost {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: clamp(6rem, 12vw, 9rem) var(--gutter) clamp(2rem, 5vw, 4rem);
+  overflow: hidden;
+}
+
+.lost__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+
+.lost__badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: lost-blink 1.2s steps(2) infinite;
+}
+
+@keyframes lost-blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.lost__title {
+  margin-top: 1rem;
+  font-size: clamp(4.5rem, 14vw, 14rem);
+  line-height: 0.84;
+}
+
+.lost__line {
+  margin-top: 1.2rem;
+  max-width: 38ch;
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.5;
+  color: #333;
+}
+
+.lost__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: 1.8rem;
+}
+
+.lost__cta {
+  display: inline-flex;
+  align-items: center;
+  height: 3.2rem;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  background: #111;
+  color: var(--bg);
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.84rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition:
+    background 0.3s var(--ease-out),
+    color 0.3s var(--ease-out);
+}
+
+.lost__cta:hover {
+  background: var(--accent);
+  color: #111;
+}
+
+.lost__ghost {
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #444;
+}
+
+.lost__scene {
+  position: relative;
+}
+
+.lost__num {
+  position: absolute;
+  right: -0.04em;
+  bottom: 0.15em;
+  font-size: clamp(8rem, 26vw, 26rem);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(17, 17, 17, 0.18);
+  pointer-events: none;
+}
+
+.lost__road {
+  --road: clamp(40px, 6vw, 64px);
+  position: relative;
+  height: var(--road);
+  margin: 0 calc(var(--gutter) * -1);
+  background: #1a1a1a;
+}
+
+.lost__lines {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(
+    to right,
+    var(--bg) 0 18px,
+    transparent 18px 34px
+  );
+  opacity: 0.85;
+}
+
+.lost__car {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: calc(var(--road) * 1.15);
+  translate: 0 -50%;
+  animation: lost-drive 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.lost__car svg {
+  display: block;
+  width: 100%;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+}
+
+@keyframes lost-drive {
+  0% {
+    transform: translateX(-120%);
+  }
+  48% {
+    transform: translateX(calc(78vw - 100%));
+  }
+  52% {
+    transform: translateX(calc(78vw - 112%)) rotate(-6deg);
+  }
+  56% {
+    transform: translateX(calc(78vw - 104%)) rotate(4deg);
+  }
+  62% {
+    transform: translateX(calc(78vw - 106%)) rotate(0deg);
+  }
+  100% {
+    transform: translateX(-120%);
+  }
+}
+
+.lost__bonk {
+  position: absolute;
+  left: calc(78vw - var(--road) * 0.4);
+  top: -1.6rem;
+  font-family: var(--font-bebas), sans-serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0;
+  animation: lost-bonk 5s ease-out infinite;
+}
+
+@keyframes lost-bonk {
+  0%,
+  48% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.6);
+  }
+  52% {
+    opacity: 1;
+    transform: translateY(0) scale(1.15);
+  }
+  64%,
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(1);
+  }
+}
+
+.lost__barrier {
+  position: absolute;
+  top: -14%;
+  bottom: -14%;
+  left: 78vw;
+  width: clamp(14px, 1.6vw, 20px);
+  border: 1.5px solid #111;
+  border-radius: 3px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 8px,
+    #111 8px 16px
+  );
+}
+
+.lost__sign {
+  position: absolute;
+  bottom: calc(100% + 0.6rem);
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #111;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: inset 0 0 0 1.5px #111;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lost__car {
+    animation: none;
+    transform: translateX(calc(78vw - 106%));
+  }
+
+  .lost__bonk {
+    display: none;
+  }
+}

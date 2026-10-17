@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { lockScroll, onLoaded, setLenis, unlockScroll } from "@/lib/scroll";
+import { onLoaded, setLenis, unlockScroll } from "@/lib/scroll";
 
 export default function SmoothScroll() {
   useEffect(() => {
@@ -25,7 +25,6 @@ export default function SmoothScroll() {
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
 
-    lockScroll();
     const off = onLoaded(() => {
       unlockScroll();
       ScrollTrigger.refresh();

@@ -1,0 +1,146 @@
+.soon {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(5rem, 9vw, 7rem) var(--gutter) 0;
+  overflow: hidden;
+}
+
+.soon__back {
+  align-self: flex-start;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.soon__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 3rem 0 8rem;
+}
+
+.soon__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+
+.soon__badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: soon-blink 1.2s steps(2) infinite;
+}
+
+@keyframes soon-blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.soon__title {
+  font-size: clamp(5rem, 18vw, 18rem);
+  line-height: 0.82;
+}
+
+.soon__line {
+  max-width: 34ch;
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.5;
+  color: #333;
+}
+
+.soon__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 0.6rem;
+}
+
+.soon__cta {
+  display: inline-flex;
+  align-items: center;
+  height: 3.1rem;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  background: #111;
+  color: var(--bg);
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition:
+    background 0.3s var(--ease-out),
+    color 0.3s var(--ease-out);
+}
+
+.soon__cta:hover {
+  background: var(--accent);
+  color: #111;
+}
+
+.soon__ghost {
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.soon__tape {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: clamp(2rem, 6vw, 4rem);
+  padding: 0.8rem 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 18px,
+    #111 18px 36px
+  );
+  transform: rotate(-3deg);
+  overflow: hidden;
+}
+
+.soon__tape span {
+  display: inline-block;
+  padding: 0.35rem 0;
+  background: #111;
+  color: var(--bg);
+  font-family: var(--font-bebas), sans-serif;
+  font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: pre;
+  animation: soon-tape 22s linear infinite;
+}
+
+@keyframes soon-tape {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 760px) {
+  .soon__cta--desktop {
+    display: none;
+  }
+}

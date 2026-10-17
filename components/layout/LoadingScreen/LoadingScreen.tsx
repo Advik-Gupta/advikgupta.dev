@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { markLoaded } from "@/lib/scroll";
+import { isLoaded, lockScroll, markLoaded } from "@/lib/scroll";
 import "./LoadingScreen.css";
 
 const WORDS = ["websites", "backends", "interfaces", "experiences"];
@@ -19,10 +19,12 @@ const PHOTOS = [
 
 export default function LoadingScreen() {
   const root = useRef<HTMLDivElement>(null);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(() => isLoaded());
 
   useGSAP(
     () => {
+      if (isLoaded()) return;
+      lockScroll();
       const reduce = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;

@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { STOPS } from "./stops";
-import { buildPath, type Point } from "./path";
+import { buildPath, buildSegments, type Point } from "./path";
 import Vehicles from "./Vehicles";
 import ConstructionZone from "./ConstructionZone";
+import EndPopup from "./EndPopup";
 import "./Journey.css";
 
 const ROADWORK = STOPS.findIndex((s) => s.kind === "roadwork");
@@ -19,17 +20,62 @@ type Geometry = {
   points: Point[];
   end: Point;
   d: string;
+  segments: string[];
+};
+
+type Track = {
+  x: Float32Array;
+  y: Float32Array;
+  a: Float32Array;
+  len: Float32Array;
+  segStart: number[];
+  segLen: number[];
 };
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+
+function sampleTrack(paths: SVGPathElement[]): Track {
+  const xs: number[] = [];
+  const ys: number[] = [];
+  const lens: number[] = [];
+  const segStart: number[] = [];
+  const segLen: number[] = [];
+  let offset = 0;
+  paths.forEach((p) => {
+    const L = p.getTotalLength();
+    segStart.push(offset);
+    segLen.push(L);
+    const n = Math.max(6, Math.ceil(L / 8));
+    for (let i = xs.length ? 1 : 0; i <= n; i++) {
+      const pt = p.getPointAtLength((L * i) / n);
+      xs.push(pt.x);
+      ys.push(pt.y);
+      lens.push(offset + (L * i) / n);
+    }
+    offset += L;
+  });
+  const a = new Float32Array(xs.length);
+  for (let i = 0; i < xs.length; i++) {
+    const j = Math.min(xs.length - 1, i + 1);
+    const k = j === i ? i - 1 : i;
+    a[i] = Math.atan2(ys[j] - ys[k], xs[j] - xs[k]);
+  }
+  return {
+    x: Float32Array.from(xs),
+    y: Float32Array.from(ys),
+    a,
+    len: Float32Array.from(lens),
+    segStart,
+    segLen,
+  };
+}
 
 export default function Journey() {
   const root = useRef<HTMLElement>(null);
   const map = useRef<HTMLDivElement>(null);
   const stopsRef = useRef<HTMLOListElement>(null);
-  const roadRef = useRef<SVGPathElement>(null);
-  const revealRef = useRef<SVGPathElement>(null);
-  const rigRef = useRef<SVGGElement>(null);
+  const segRef = useRef<SVGGElement>(null);
+  const rigRef = useRef<HTMLDivElement>(null);
   const [geo, setGeo] = useState<Geometry | null>(null);
 
   useEffect(() => {
@@ -37,9 +83,14 @@ export default function Journey() {
     const list = stopsRef.current;
     if (!el || !list) return;
 
+    let lastW = 0;
+    let lastH = 0;
     const measure = () => {
       const w = el.clientWidth;
       const h = el.clientHeight;
+      if (w === lastW && Math.abs(h - lastH) < 2) return;
+      lastW = w;
+      lastH = h;
       const mobile = w < 640;
       const road = mobile ? 16 : 30;
       const amp = mobile ? w * 0.035 : Math.min(90, w * 0.06);
@@ -65,6 +116,7 @@ export default function Journey() {
           last.offsetTop + last.offsetHeight + (mobile ? 70 : 110),
         ),
       };
+      const all = [start, ...route, end];
       setGeo({
         w,
         h,
@@ -72,7 +124,8 @@ export default function Journey() {
         mobile,
         points,
         end,
-        d: buildPath([start, ...route, end]),
+        d: buildPath(all),
+        segments: buildSegments(all),
       });
     };
 
@@ -152,21 +205,19 @@ export default function Journey() {
   );
 
   useEffect(() => {
-    const road = roadRef.current;
-    const reveal = revealRef.current;
+    const segGroup = segRef.current;
     const rig = rigRef.current;
     const el = map.current;
-    if (!geo || !road || !reveal || !rig || !el) return;
+    if (!geo || !segGroup || !rig || !el) return;
 
-    const total = road.getTotalLength();
-    const N = 800;
-    const samples: { len: number; y: number }[] = [];
-    for (let i = 0; i <= N; i++) {
-      const len = (total * i) / N;
-      samples.push({ len, y: road.getPointAtLength(len).y });
-    }
+    const segs = Array.from(segGroup.querySelectorAll<SVGPathElement>("path"));
+    const track = sampleTrack(segs);
+    const N = track.y.length - 1;
+    segs.forEach((p, i) => {
+      p.style.strokeDasharray = `${track.segLen[i] + 1}`;
+      p.style.strokeDashoffset = `${track.segLen[i] + 1}`;
+    });
 
-    reveal.style.strokeDasharray = `${total}`;
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -180,27 +231,35 @@ export default function Journey() {
     const poof = rig.querySelector<SVGCircleElement>(".journey__poof");
     const flame = rig.querySelector<SVGGElement>(".journey__flame");
     const smoke = Array.from(
-      el.querySelectorAll<SVGCircleElement>(".journey__smoke"),
+      el.querySelectorAll<HTMLElement>(".journey__smoke"),
     );
     const lane = geo.road * 0.24;
     const zone = geo.points[ROADWORK];
     const parkY = geo.end.y - geo.road * 2.5;
     let stage = -1;
+    let seg = -1;
+    let reached = -1;
+    let launched = false;
+    let top = 0;
+    let frame = 0;
 
-    const lengthAtY = (y: number) => {
-      if (y <= samples[0].y) return 0;
-      if (y >= samples[N].y) return total;
+    const measureTop = () => {
+      top = el.getBoundingClientRect().top + window.scrollY;
+    };
+
+    const indexAtY = (y: number) => {
+      if (y <= track.y[0]) return 0;
+      if (y >= track.y[N]) return N;
       let lo = 0;
       let hi = N;
       while (hi - lo > 1) {
         const mid = (lo + hi) >> 1;
-        if (samples[mid].y < y) lo = mid;
+        if (track.y[mid] < y) lo = mid;
         else hi = mid;
       }
-      const a = samples[lo];
-      const b = samples[hi];
-      const t = b.y === a.y ? 0 : (y - a.y) / (b.y - a.y);
-      return a.len + (b.len - a.len) * t;
+      const a = track.y[lo];
+      const b = track.y[hi];
+      return lo + (b === a ? 0 : (y - a) / (b - a));
     };
 
     const setStage = (next: number) => {
@@ -230,79 +289,117 @@ export default function Journey() {
         );
     };
 
+    const reveal = (len: number) => {
+      let k = track.segStart.length - 1;
+      while (k > 0 && track.segStart[k] > len) k--;
+      if (k !== seg) {
+        segs.forEach((p, i) => {
+          if (i < k) p.style.strokeDashoffset = "0";
+          else if (i > k) p.style.strokeDashoffset = `${track.segLen[i] + 1}`;
+        });
+        seg = k;
+      }
+      const local = Math.min(track.segLen[k], len - track.segStart[k]);
+      segs[k].style.strokeDashoffset = `${track.segLen[k] + 1 - local}`;
+    };
+
     const update = () => {
-      const rect = el.getBoundingClientRect();
-      const raw = reduce ? parkY : window.innerHeight * 0.62 - rect.top;
-      const targetY = Math.min(parkY, raw);
-      const len = lengthAtY(targetY);
-      const p = road.getPointAtLength(len);
-      const q = road.getPointAtLength(Math.min(total, len + 2));
-      const dx = q.x - p.x || 0;
-      const dy = q.y - p.y || 1;
-      const mag = Math.hypot(dx, dy) || 1;
-      const nx = dy / mag;
-      const ny = -dx / mag;
-      let angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-      if (zone && Math.abs(p.y - zone.y) < 90 && !reduce)
+      frame = 0;
+      const raw = reduce
+        ? parkY
+        : window.innerHeight * 0.62 - (top - window.scrollY);
+      const f = indexAtY(Math.min(parkY, raw));
+      const i = Math.floor(f);
+      const j = Math.min(N, i + 1);
+      const t = f - i;
+      const px = track.x[i] + (track.x[j] - track.x[i]) * t;
+      const py = track.y[i] + (track.y[j] - track.y[i]) * t;
+      const ang = track.a[i] + (track.a[j] - track.a[i]) * t;
+      const len = track.len[i] + (track.len[j] - track.len[i]) * t;
+
+      let angle = (ang * 180) / Math.PI;
+      if (zone && Math.abs(py - zone.y) < 90 && !reduce)
         angle += (Math.random() - 0.5) * 7;
 
-      const next =
-        p.y >= geo.points[STAGE_AT[2]].y - 4
+      setStage(
+        py >= geo.points[STAGE_AT[2]].y - 4
           ? 3
-          : p.y >= geo.points[STAGE_AT[1]].y - 4
+          : py >= geo.points[STAGE_AT[1]].y - 4
             ? 2
-            : p.y >= geo.points[STAGE_AT[0]].y + 30
+            : py >= geo.points[STAGE_AT[0]].y + 30
               ? 1
-              : 0;
-      setStage(next);
+              : 0,
+      );
 
-      let x = p.x + nx * lane;
-      let y = p.y + ny * lane;
+      let x = px + Math.sin(ang) * lane;
+      let y = py - Math.cos(ang) * lane;
       let scale = 1;
       let launch = 0;
 
       if (stage === 3 && raw > parkY && !reduce) {
         const extra = raw - parkY;
         launch = clamp01(extra / 160);
-        const ease = 1 - Math.pow(1 - launch, 3);
-        angle = 90 + (-75 - 90) * ease;
+        const e = 1 - Math.pow(1 - launch, 3);
+        angle = 90 + (-75 - 90) * e;
         const dist = Math.max(0, extra - 90);
         x += dist * 0.45;
         y -= dist * 2.4;
         scale = 1 + launch * 0.5;
       }
 
-      rig.setAttribute(
-        "transform",
-        `translate(${x} ${y}) rotate(${angle}) scale(${scale})`,
-      );
-      if (flame) flame.style.transform = `scaleX(${0.6 + launch * 1.6})`;
-      smoke.forEach((s, i) => {
-        const t = clamp01(launch * 1.4 - i * 0.15);
-        s.style.opacity = String(t > 0 && t < 1 ? 0.7 * (1 - t) + 0.2 : 0);
-        s.style.transform = `scale(${0.4 + t * 2.2})`;
-      });
-      reveal.style.strokeDashoffset = `${total - len}`;
+      rig.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${angle}deg) scale(${scale})`;
 
-      geo.points.forEach((pt, i) => {
-        const on = p.y >= pt.y - 4;
-        items[i]?.classList.toggle("is-reached", on);
-      });
-      markers.forEach((m) => {
-        const i = Number(m.dataset.i);
-        m.classList.toggle("is-on", p.y >= geo.points[i].y - 4);
-      });
+      if (launch > 0 || launched) {
+        launched = launch > 0;
+        if (flame) flame.style.transform = `scaleX(${0.6 + launch * 1.6})`;
+        smoke.forEach((s, n) => {
+          const k = clamp01(launch * 1.4 - n * 0.15);
+          s.style.opacity = String(k > 0 && k < 1 ? 0.7 * (1 - k) + 0.2 : 0);
+          s.style.transform = `translate(-50%, -50%) scale(${0.4 + k * 2.2})`;
+        });
+      }
+
+      reveal(len);
+
+      let count = 0;
+      while (count < geo.points.length && py >= geo.points[count].y - 4)
+        count++;
+      if (count !== reached) {
+        reached = count;
+        items.forEach((item, n) =>
+          item.classList.toggle("is-reached", n < count),
+        );
+        markers.forEach((m) =>
+          m.classList.toggle("is-on", Number(m.dataset.i) < count),
+        );
+      }
     };
 
+    const desktop = window.matchMedia("(pointer: fine)").matches;
+    const schedule = () => {
+      if (desktop) {
+        update();
+        return;
+      }
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    measureTop();
     update();
     const st = ScrollTrigger.create({
       trigger: el,
       start: "top bottom",
       end: "bottom top-=600",
-      onUpdate: update,
-      onRefresh: update,
+      onUpdate: schedule,
+      onRefresh: () => {
+        measureTop();
+        schedule();
+      },
     });
-    return () => st.kill();
+    return () => {
+      cancelAnimationFrame(frame);
+      st.kill();
+    };
   }, [geo]);
 
   const zone = geo ? geo.points[ROADWORK] : null;
@@ -348,60 +445,40 @@ export default function Journey() {
                 <rect width="12" height="12" fill="#111" />
                 <rect width="6" height="12" fill="#ff7a2c" />
               </pattern>
-              <linearGradient
-                id="road-fade"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2={geo.h}
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop offset={(geo.end.y - 120) / geo.h} stopColor="#fff" />
-                <stop
-                  offset={geo.end.y / geo.h}
-                  stopColor="#fff"
-                  stopOpacity="0"
-                />
+              <linearGradient id="road-fade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#ede8df" stopOpacity="0" />
+                <stop offset="1" stopColor="#ede8df" />
               </linearGradient>
-              <mask id="road-end" maskUnits="userSpaceOnUse">
-                <rect width={geo.w} height={geo.h} fill="url(#road-fade)" />
-              </mask>
-              <mask id="road-reveal" maskUnits="userSpaceOnUse">
-                <path
-                  ref={revealRef}
-                  d={geo.d}
-                  fill="none"
-                  stroke="#fff"
-                  strokeWidth={geo.road + 10}
-                />
-              </mask>
             </defs>
 
-            <g mask="url(#road-end)">
-              <path
-                ref={roadRef}
-                d={geo.d}
-                className="journey__asphalt journey__asphalt--ghost"
-                strokeWidth={geo.road}
-              />
-              <path
-                d={geo.d}
-                className="journey__lines journey__lines--ghost"
-                strokeWidth={geo.road < 20 ? 1.5 : 2}
-              />
-              <g mask="url(#road-reveal)">
+            <path
+              d={geo.d}
+              className="journey__asphalt journey__asphalt--ghost"
+              strokeWidth={geo.road}
+            />
+            <g ref={segRef}>
+              {geo.segments.map((d, i) => (
                 <path
-                  d={geo.d}
-                  className="journey__asphalt"
-                  strokeWidth={geo.road}
+                  key={i}
+                  d={d}
+                  className="journey__asphalt journey__seg"
+                  strokeWidth={geo.road + 0.5}
                 />
-                <path
-                  d={geo.d}
-                  className="journey__lines"
-                  strokeWidth={geo.road < 20 ? 1.5 : 2}
-                />
-              </g>
+              ))}
             </g>
+            <path
+              d={geo.d}
+              className="journey__lines"
+              strokeWidth={geo.road < 20 ? 1.5 : 2}
+            />
+            <rect
+              className="journey__fade"
+              x={geo.end.x - geo.road * 2}
+              y={geo.end.y - 130}
+              width={geo.road * 4}
+              height={140}
+              fill="url(#road-fade)"
+            />
 
             {zone && <ConstructionZone x={zone.x} y={zone.y} road={geo.road} />}
 
@@ -411,12 +488,9 @@ export default function Journey() {
                   key={i}
                   data-i={i}
                   className="journey__marker"
-                  cx={pt.x}
+                  cx={pt.x + (i % 2 === 0 ? -1 : 1) * geo.road * 0.95}
                   cy={pt.y}
                   r={geo.road < 20 ? 5 : 8}
-                  style={{
-                    transform: `translateX(${(i % 2 === 0 ? -1 : 1) * geo.road * 0.95}px)`,
-                  }}
                 />
               ),
             )}
@@ -439,31 +513,31 @@ export default function Journey() {
         </ol>
 
         {geo && pad && (
-          <svg
-            className="journey__vehicles"
-            width={geo.w}
-            height={geo.h}
-            viewBox={`0 0 ${geo.w} ${geo.h}`}
-            aria-hidden="true"
-          >
+          <>
             {[0, 1, 2].map((i) => (
-              <circle
+              <span
                 key={i}
                 className="journey__smoke"
-                cx={pad.x + (i - 1) * geo.road * 0.6}
-                cy={pad.y + geo.road * (0.8 + i * 0.2)}
-                r={geo.road * 0.5}
+                style={{
+                  left: pad.x + (i - 1) * geo.road * 0.6,
+                  top: pad.y + geo.road * (0.8 + i * 0.2),
+                  width: geo.road,
+                  height: geo.road,
+                }}
               />
             ))}
-            <g ref={rigRef}>
-              <g transform={`scale(${base})`}>
-                <circle className="journey__poof" r="14" />
-                <Vehicles />
-              </g>
-            </g>
-          </svg>
+            <div className="journey__rig" ref={rigRef} aria-hidden="true">
+              <svg viewBox="-45 -25 90 50" width="90" height="50">
+                <g transform={`scale(${base})`}>
+                  <circle className="journey__poof" r="14" />
+                  <Vehicles />
+                </g>
+              </svg>
+            </div>
+          </>
         )}
       </div>
+      <EndPopup />
     </section>
   );
 }

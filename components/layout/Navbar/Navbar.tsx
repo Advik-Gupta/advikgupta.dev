@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { lockScroll, scrollToId, unlockScroll } from "@/lib/scroll";
-import { EMAIL, NAV_LINKS, SOCIALS } from "@/lib/site";
+import { EMAIL, NAV_LINKS, PAGE_LINKS, SOCIALS } from "@/lib/site";
 import ResumeButton from "@/components/ui/ResumeButton";
 import "./Navbar.css";
 
@@ -11,6 +13,8 @@ const EASE = [0.76, 0, 0.24, 1] as const;
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     if (!open) return;
@@ -25,6 +29,10 @@ export default function Navbar() {
 
   const go = (id: string) => {
     setOpen(false);
+    if (pathname !== "/") {
+      router.push(id === "home" ? "/" : `/#${id}`);
+      return;
+    }
     requestAnimationFrame(() => scrollToId(id));
   };
 
@@ -105,6 +113,19 @@ export default function Navbar() {
               transition={{ delay: 0.6, duration: 0.6, ease: EASE }}
             >
               <ResumeButton tone="dark" />
+              <div className="nav__pages">
+                {PAGE_LINKS.map((p) => (
+                  <Link
+                    key={p.href}
+                    href={p.href}
+                    onClick={() => setOpen(false)}
+                    className={`nav__page ${pathname === p.href ? "is-current" : ""} ${p.href === "/freebies" ? "nav__page--desktop" : ""}`}
+                    data-cursor="grow"
+                  >
+                    {p.label}
+                  </Link>
+                ))}
+              </div>
               <div className="nav__socials">
                 <a
                   href={`mailto:${EMAIL}`}

@@ -34,6 +34,10 @@ export function scrollToId(id: string) {
   }
 }
 
+export function isLoaded() {
+  return loaded;
+}
+
 export function markLoaded() {
   loaded = true;
   loadListeners.forEach((fn) => fn());

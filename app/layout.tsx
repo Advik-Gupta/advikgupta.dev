@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, Oswald } from "next/font/google";
+import { Bebas_Neue, Doto, JetBrains_Mono, Oswald } from "next/font/google";
 import CustomCursor from "@/components/layout/CustomCursor";
 import SmoothScroll from "@/components/layout/SmoothScroll";
+import Navbar from "@/components/layout/Navbar";
 import { EMAIL, SOCIALS } from "@/lib/site";
 import "./globals.css";
 
@@ -15,6 +16,19 @@ const oswald = Oswald({
   weight: ["300", "400", "500"],
   variable: "--font-oswald",
   subsets: ["latin"],
+});
+
+const doto = Doto({
+  weight: ["700"],
+  variable: "--font-dot",
+  subsets: ["latin"],
+  preload: false,
+});
+
+const mono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  preload: false,
 });
 
 const TITLE = "Advik Gupta";
@@ -66,7 +80,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bebasNeue.variable} ${oswald.variable} antialiased`}
+      className={`${bebasNeue.variable} ${oswald.variable} ${doto.variable} ${mono.variable} antialiased`}
     >
       <body>
         <script
@@ -99,6 +113,7 @@ export default function RootLayout({
         />
         <SmoothScroll />
         <CustomCursor />
+        <Navbar />
         {children}
       </body>
     </html>

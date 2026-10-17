@@ -4,9 +4,11 @@ import {
   ElementType,
   forwardRef,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
+import Image from "next/image";
 import { motion, useInView, UseInViewOptions, Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -73,7 +75,7 @@ export const MediaBetweenText = forwardRef<
       leftTextClassName,
       rightTextClassName,
     },
-    ref
+    ref,
   ) => {
     const componentRef = useRef<HTMLDivElement>(null);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -81,7 +83,7 @@ export const MediaBetweenText = forwardRef<
 
     const isInView = useInView(
       containerRef ?? componentRef,
-      useInViewOptionsProp
+      useInViewOptionsProp,
     );
 
     useImperativeHandle(ref, () => ({
@@ -93,13 +95,12 @@ export const MediaBetweenText = forwardRef<
       triggerType === "hover"
         ? isHovered
         : triggerType === "inView"
-        ? isInView
-        : triggerType === "ref"
-        ? isAnimating
-        : false;
+          ? isInView
+          : triggerType === "ref"
+            ? isAnimating
+            : false;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const TextComponent = motion.create(as as any);
+    const TextComponent = useMemo(() => motion.create(as as "p"), [as]);
 
     return (
       <div
@@ -108,41 +109,42 @@ export const MediaBetweenText = forwardRef<
         onMouseEnter={() => triggerType === "hover" && setIsHovered(true)}
         onMouseLeave={() => triggerType === "hover" && setIsHovered(false)}
       >
-        <TextComponent className={leftTextClassName}>
-          {firstText}
-        </TextComponent>
-        <motion.div
-          className={cn(mediaContainerClassName)}
-          variants={animationVariants}
-          initial="initial"
-          animate={shouldAnimate ? "animate" : "initial"}
-        >
-          {mediaType === "video" ? (
-            <video
-              className="w-full h-full object-cover"
-              autoPlay={autoPlay}
-              loop={loop}
-              muted={muted}
-              playsInline={playsInline}
-              poster={fallbackUrl}
-            >
-              <source src={mediaUrl} type="video/mp4" />
-            </video>
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={mediaUrl}
-              alt={alt ?? `${firstText} ${secondText}`}
-              className="w-full h-full object-cover"
-            />
-          )}
-        </motion.div>
+        <TextComponent className={leftTextClassName}>{firstText}</TextComponent>
+        <span className="media-anchor">
+          <motion.div
+            className={cn(mediaContainerClassName)}
+            variants={animationVariants}
+            initial="initial"
+            animate={shouldAnimate ? "animate" : "initial"}
+          >
+            {mediaType === "video" ? (
+              <video
+                className="w-full h-full object-cover"
+                autoPlay={autoPlay}
+                loop={loop}
+                muted={muted}
+                playsInline={playsInline}
+                poster={fallbackUrl}
+              >
+                <source src={mediaUrl} type="video/mp4" />
+              </video>
+            ) : (
+              <Image
+                src={mediaUrl}
+                alt={alt ?? `${firstText} ${secondText}`}
+                fill
+                sizes="200px"
+                className="object-cover"
+              />
+            )}
+          </motion.div>
+        </span>
         <TextComponent className={rightTextClassName}>
           {secondText}
         </TextComponent>
       </div>
     );
-  }
+  },
 );
 
 MediaBetweenText.displayName = "MediaBetweenText";

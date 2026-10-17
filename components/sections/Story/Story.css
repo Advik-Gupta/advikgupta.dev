@@ -1,0 +1,65 @@
+.story {
+  position: relative;
+  padding: clamp(9rem, 18vw, 15rem) var(--gutter) clamp(4rem, 8vw, 6rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 22rem);
+  column-gap: clamp(2rem, 4vw, 4rem);
+  row-gap: 2rem;
+  align-items: end;
+}
+
+.story__statement {
+  font-size: clamp(2.7rem, 6.4vw, 7.6rem);
+  line-height: 0.95;
+}
+
+.story__statement .hl {
+  display: inline;
+}
+
+.story__aside {
+  padding-bottom: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.6rem;
+}
+
+.story__wave {
+  width: 9rem;
+  height: auto;
+  overflow: visible;
+}
+
+.story__wave path {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.story__line {
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1.6;
+  color: #2a2a2a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story__wave path {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .story {
+    grid-template-columns: 1fr;
+    padding-top: 6rem;
+  }
+
+  .story__statement {
+    font-size: clamp(2.6rem, 12.5vw, 4rem);
+  }
+}

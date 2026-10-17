@@ -1,14 +1,13 @@
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   background: #ede8df;
   position: relative;
   overflow: hidden;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  padding: 1rem;
+  padding: 5rem 0;
 }
 
 .hero__content {
@@ -16,28 +15,37 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-top: 1.5rem;
+  will-change: transform;
 }
 
 .hero__name {
   font-family: var(--font-bebas), "Anton", sans-serif;
   font-weight: 800;
   text-transform: uppercase;
-
   line-height: 0.85;
   letter-spacing: -0.02em;
-
   white-space: nowrap;
-
-  font-size: clamp(4rem, 30vw, 25rem);
+  font-size: 27vw;
 }
 
-.hero__name span {
+.hero__name > span {
   display: inline-block;
 }
 
 .hero__name .first {
-  margin-right: 1.5vw;
+  margin-right: 0.05em;
+}
+
+.hero__char {
+  display: inline-block;
+  vertical-align: top;
+  clip-path: inset(-0.3em -0.3em 0 -0.3em);
+  will-change: transform;
+}
+
+.hero__char-in {
+  display: inline-block;
+  will-change: transform;
 }
 
 .hero__meta {
@@ -46,71 +54,107 @@
   letter-spacing: 0.3em;
   color: #7a7a7a;
   text-transform: uppercase;
-
   margin-top: 1rem;
+}
+
+.hero__meta-wrap {
+  letter-spacing: 0.3em;
 }
 
 .hero__role {
   font-family: var(--font-bebas), "Anton", sans-serif;
   font-weight: 900;
   text-transform: uppercase;
-
   font-size: clamp(1.8rem, 5vw, 10rem);
   margin-top: 3rem;
-
   display: flex;
   align-items: center;
+  gap: 0.3em;
 }
 
-.hero__role--desktop {
+.hero__role > span {
+  display: inline-block;
+  will-change: transform;
+}
+
+.hero__bar-wrap {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+.hero__bar {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #4a4a4a;
 }
 
-.hero__role--mobile {
-  display: none;
+.hero__bar-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
-.hero__photo-inline-wrapper {
-  position: fixed;
-  bottom: -8%;
-  left: 42%;
-  width: clamp(3rem, 15vw, 15rem);
-  will-change: transform, opacity;
+.hero__pulse {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
-.hero__photo-inline {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  object-position: top;
-  display: block;
+.hero__pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-.hero__photo-bottom-wrapper {
-  display: none;
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
 }
 
-.hero__photo-bottom {
-  width: clamp(12rem, 80vw, 22rem);
-  height: auto;
-  object-fit: contain;
-  object-position: top;
-  display: block;
-  max-width: none !important;
+.hero__resume {
+  color: #111;
+  font-weight: 500;
+}
+
+.hero__resume-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  color: var(--accent);
+  transition: transform 0.4s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .hero__resume:hover .hero__resume-icon {
+    transform: translate(3px, -3px);
+  }
 }
 
 @media (max-width: 640px) {
-  .hero__content {
-    margin-top: 3rem;
-    padding-bottom: clamp(14rem, 70vw, 24rem);
+  .hero {
+    padding: 4.5rem 0;
   }
 
   .hero__name {
     white-space: normal;
-    font-size: clamp(3rem, 45vw, 15rem);
+    font-size: 44vw;
   }
 
-  .hero__name span {
+  .hero__name > span {
     display: block;
   }
 
@@ -119,33 +163,21 @@
   }
 
   .hero__meta {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     font-size: 0.6rem;
   }
 
-  .hero__role--desktop {
-    display: none;
-  }
-
-  .hero__role--mobile {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  .hero__role {
+    flex-direction: column;
+    gap: 0;
     font-size: clamp(1.5rem, 16vw, 4rem);
-    margin-top: 1rem;
-    line-height: 3rem;
+    margin-top: 1.4rem;
+    line-height: 0.95;
     font-weight: 600;
   }
 
-  .hero__photo-inline-wrapper {
-    display: none;
-  }
-
-  .hero__photo-bottom-wrapper {
-    display: block;
-    position: fixed;
-    bottom: -9%;
-    left: 50%;
-    transform: translateX(-50%);
+  .hero__bar {
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
   }
 }

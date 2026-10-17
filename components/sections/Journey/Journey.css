@@ -1,0 +1,303 @@
+.journey {
+  padding: clamp(5rem, 10vw, 8rem) var(--gutter) 0;
+}
+
+.journey__head {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.journey__title {
+  font-size: clamp(4rem, 13vw, 13rem);
+  line-height: 0.85;
+}
+
+.journey__mask {
+  display: inline-block;
+  clip-path: inset(-0.3em -0.3em 0 -0.3em);
+  vertical-align: top;
+}
+
+.journey__word {
+  display: inline-block;
+}
+
+.journey__sub {
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: #333;
+}
+
+.journey__map {
+  position: relative;
+}
+
+.journey__road {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.journey__asphalt {
+  fill: none;
+  stroke: #1a1a1a;
+  stroke-linecap: round;
+}
+
+.journey__asphalt--ghost {
+  stroke: #ddd6c9;
+}
+
+.journey__lines {
+  fill: none;
+  stroke: #ede8df;
+  stroke-dasharray: 10 12;
+  stroke-linecap: round;
+}
+
+.journey__lines--ghost {
+  stroke: #ede8df;
+  opacity: 0.8;
+}
+
+.journey__marker {
+  fill: var(--bg);
+  stroke: #111;
+  stroke-width: 2;
+  transition:
+    fill 0.4s var(--ease-out),
+    stroke 0.4s var(--ease-out);
+}
+
+.journey__marker.is-on {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.journey__marker--works {
+  stroke-dasharray: 3 3;
+}
+
+.journey__vehicles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.journey__vehicles > g {
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25));
+}
+
+.journey__poof {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  opacity: 0;
+}
+
+.journey__flame {
+  transform-box: fill-box;
+  transform-origin: right center;
+}
+
+.journey__flame path {
+  transform-box: fill-box;
+  transform-origin: right center;
+  animation: flicker 0.12s ease-in-out infinite alternate;
+}
+
+@keyframes flicker {
+  from {
+    transform: scaleX(0.8) scaleY(0.9);
+  }
+  to {
+    transform: scaleX(1.15) scaleY(1.05);
+  }
+}
+
+.journey__smoke {
+  fill: #d9d2c5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.journey__stops {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(7rem, 12vw, 11rem);
+  padding: clamp(4rem, 8vw, 6rem) 0 clamp(7rem, 11vw, 10rem);
+}
+
+.journey__stop {
+  width: min(40%, 34rem);
+}
+
+.journey__stop.is-left {
+  margin-left: 4%;
+}
+
+.journey__stop.is-right {
+  margin-left: auto;
+  margin-right: 4%;
+}
+
+.journey__card {
+  position: relative;
+  min-height: clamp(13rem, 17vw, 15.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.4rem, 2.6vw, 2.2rem);
+  will-change: transform;
+  border-radius: clamp(1rem, 2vw, 1.5rem);
+  background: #f6f2ea;
+  border: 1.5px solid transparent;
+  box-shadow: 0 1px 0 rgba(17, 17, 17, 0.06);
+  transition:
+    border-color 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out);
+}
+
+.journey__stop.is-reached .journey__card {
+  border-color: #111;
+}
+
+.journey__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.4s var(--ease-out);
+}
+
+.journey__stop.is-reached .journey__kicker {
+  color: var(--accent-deep);
+}
+
+.journey__name {
+  margin-top: 0.55rem;
+  font-size: clamp(2.5rem, 4.4vw, 4.2rem);
+  line-height: 0.92;
+}
+
+.journey__note {
+  margin-top: 0.6rem;
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.08rem, 1.4vw, 1.3rem);
+  line-height: 1.5;
+  color: #333;
+}
+
+.journey__stop--roadwork .journey__card {
+  background: #111;
+  color: var(--bg);
+  overflow: hidden;
+  padding-top: calc(clamp(1.25rem, 2.4vw, 2rem) + 14px);
+}
+
+.journey__stop--roadwork .journey__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 12px,
+    #111 12px 24px
+  );
+}
+
+.journey__stop--roadwork .journey__kicker,
+.journey__stop--roadwork.is-reached .journey__kicker {
+  color: var(--accent);
+}
+
+.journey__stop--roadwork .journey__note {
+  color: #c9c4bb;
+}
+
+.journey__stop--roadwork.is-reached .journey__card {
+  border-color: var(--accent);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px) rotate(-0.6deg);
+  }
+  50% {
+    transform: translateX(4px) rotate(0.6deg);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+.journey__stop--future .journey__card {
+  background: transparent;
+  border: 1.5px dashed #111;
+}
+
+.journey__stop--future .journey__name {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #111;
+}
+
+.journey__stop--future.is-reached .journey__name {
+  color: var(--accent);
+  -webkit-text-stroke: 0;
+}
+
+@media (max-width: 640px) {
+  .journey__stops {
+    gap: 6rem;
+    padding: 2.5rem 0 5.5rem;
+  }
+
+  .journey__stop {
+    width: 76%;
+  }
+
+  .journey__stop.is-left {
+    margin-left: 0;
+  }
+
+  .journey__stop.is-right {
+    margin-right: 0;
+  }
+
+  .journey__card {
+    min-height: 12.5rem;
+    padding: 1.25rem 1.2rem 1.35rem;
+  }
+
+  .journey__name {
+    font-size: clamp(2.2rem, 10vw, 2.8rem);
+  }
+
+  .journey__note {
+    font-size: 1.05rem;
+  }
+}

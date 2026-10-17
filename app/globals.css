@@ -1,15 +1,19 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
 :root {
   --bg: #ede8df;
+  --bg-soft: #e4ded3;
   --fg: hsl(0, 0%, 7%);
+  --muted: #7a7a7a;
+  --line: rgba(17, 17, 17, 0.14);
   --accent: #ff7a2c;
-}
-
-:root {
+  --accent-deep: #e06520;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+  --gutter: clamp(1.25rem, 4vw, 3rem);
   --font-bebas: "Bebas Neue", "Anton", "Oswald", system-ui, sans-serif;
   --font-oswald: "Oswald", system-ui, sans-serif;
-  --font-archivo: "Archivo", system-ui, sans-serif;
 }
 
 *,
@@ -18,15 +22,40 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  cursor: none !important;
 }
 
 html,
 body {
   background: var(--bg);
   color: var(--fg);
-  scroll-behavior: smooth;
-  cursor: none !important;
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.is-locked,
+html.is-locked body {
+  overflow: hidden;
+}
+
+@media (pointer: fine) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
 }
 
 ::selection {
@@ -48,10 +77,63 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #e06520;
+  background: var(--accent-deep);
 }
 
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--accent) transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.display {
+  font-family: var(--font-bebas), "Anton", sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+}
+
+.hl {
+  color: var(--accent);
+}
+
+.link-line {
+  position: relative;
+  display: inline-block;
+}
+
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.15em;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .link-line:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, Archivo_Black, Oswald } from "next/font/google";
-import CustomCursor from "@/components/CustomCursor";
+import { Bebas_Neue, Oswald } from "next/font/google";
+import CustomCursor from "@/components/layout/CustomCursor";
+import SmoothScroll from "@/components/layout/SmoothScroll";
+import { EMAIL, SOCIALS } from "@/lib/site";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -9,30 +11,27 @@ const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
 });
 
-const archivioBlack = Archivo_Black({
-  weight: "400",
-  variable: "--font-archivo",
-  subsets: ["latin"],
-});
-
 const oswald = Oswald({
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500"],
   variable: "--font-oswald",
   subsets: ["latin"],
 });
 
+const TITLE = "Advik Gupta";
+const DESCRIPTION =
+  "Advik Gupta is a full-stack developer and electronics engineering student at VIT Vellore. Go, Next.js, PostgreSQL, and the occasional biosensor.";
+
 export const metadata: Metadata = {
-  title: "Advik Gupta — Professional Web Developer",
-  description:
-    "Advik Gupta is a professional web developer crafting high-conversion digital experiences. Specialising in Next.js, React, and modern web design.",
+  title: TITLE,
+  description: DESCRIPTION,
   keywords: [
-    "web developer",
     "Advik Gupta",
-    "Next.js developer",
-    "React developer",
+    "full-stack developer",
+    "Go developer",
+    "Next.js",
+    "VIT Vellore",
+    "CodeChef-VIT",
     "portfolio",
-    "web design",
-    "frontend developer",
   ],
   authors: [{ name: "Advik Gupta" }],
   creator: "Advik Gupta",
@@ -42,32 +41,21 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://advikgupta.dev",
-    title: "Advik Gupta — Professional Web Developer",
-    description:
-      "Advik Gupta is a professional web developer crafting high-conversion digital experiences.",
+    title: TITLE,
+    description: DESCRIPTION,
     siteName: "Advik Gupta",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Advik Gupta — Professional Web Developer",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Advik Gupta — Professional Web Developer",
-    description:
-      "Advik Gupta is a professional web developer crafting high-conversion digital experiences.",
-    images: ["/og-image.png"],
-    creator: "@advikgupta",
+    card: "summary",
+    title: TITLE,
+    description: DESCRIPTION,
   },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#ede8df",
 };
 
 export default function RootLayout({
@@ -78,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bebasNeue.variable} ${archivioBlack.variable} ${oswald.variable} antialiased`}
+      className={`${bebasNeue.variable} ${oswald.variable} antialiased`}
     >
       <body>
         <script
@@ -89,32 +77,27 @@ export default function RootLayout({
               "@type": "Person",
               name: "Advik Gupta",
               url: "https://advikgupta.dev",
-              jobTitle: "Professional Web Developer",
-              description:
-                "Professional web developer crafting high-conversion digital experiences using Next.js, React, and modern web technologies.",
-              sameAs: [],
+              email: `mailto:${EMAIL}`,
+              jobTitle: "Full-Stack Developer",
+              description: DESCRIPTION,
+              alumniOf: {
+                "@type": "CollegeOrUniversity",
+                name: "Vellore Institute of Technology",
+              },
+              sameAs: SOCIALS.map((s) => s.href),
               knowsAbout: [
-                "Web Development",
+                "Go",
                 "Next.js",
                 "React",
-                "Frontend Development",
-                "UI/UX Design",
+                "PostgreSQL",
+                "Redis",
+                "System Design",
+                "Application Security",
               ],
             }),
           }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: "Advik Gupta",
-              url: "https://advikgupta.dev",
-              description: "Professional web developer portfolio",
-            }),
-          }}
-        />
+        <SmoothScroll />
         <CustomCursor />
         {children}
       </body>

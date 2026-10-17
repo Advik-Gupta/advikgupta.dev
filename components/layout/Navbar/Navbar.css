@@ -1,0 +1,112 @@
+.nav {
+  position: fixed;
+  top: clamp(1rem, 2.5vw, 1.5rem);
+  right: clamp(1rem, 2.5vw, 1.5rem);
+  z-index: 1000;
+  mix-blend-mode: difference;
+}
+
+.nav.is-open {
+  mix-blend-mode: normal;
+}
+
+.nav__toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+}
+
+.nav__bar {
+  display: block;
+  height: 2px;
+  background: #fff;
+  transform-origin: center;
+}
+
+.nav.is-open .nav__bar {
+  background: var(--bg);
+}
+
+.nav__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #111;
+  color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(5rem, 12vh, 7rem) var(--gutter) clamp(1.5rem, 4vh, 2.5rem);
+  overflow-y: auto;
+}
+
+.nav__links {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav__mask {
+  overflow: hidden;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  font-family: var(--font-bebas), sans-serif;
+  font-weight: 900;
+  font-size: clamp(3.4rem, 9.5vh, 7.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.nav__index {
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 400;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-top: 0.9em;
+}
+
+.nav__text {
+  display: inline-block;
+  transition:
+    transform 0.5s var(--ease-out),
+    color 0.3s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .nav__link:hover .nav__text {
+    transform: translateX(1.2rem);
+    color: var(--accent);
+  }
+}
+
+.nav__link:active .nav__text {
+  color: var(--accent);
+}
+
+.nav__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding-top: 2rem;
+}
+
+.nav__socials {
+  display: flex;
+  gap: 1.5rem;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #c9c4bb;
+}

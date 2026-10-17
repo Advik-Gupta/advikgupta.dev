@@ -4,6 +4,7 @@ import React, {
   RefObject,
   useCallback,
   useEffect,
+  useId,
   useMemo,
   useRef,
 } from "react";
@@ -211,8 +212,8 @@ export default function MarqueeAlongSvgPath({
   const baseOffset = useMotionValue(0);
   const pathRef = useRef<SVGPathElement>(null);
 
-  const id =
-    pathId || `marquee-path-${Math.random().toString(36).substring(7)}`;
+  const autoId = useId();
+  const id = pathId || `marquee-path-${autoId.replace(/:/g, "")}`;
 
   useEffect(() => {
     if (!responsive) return;

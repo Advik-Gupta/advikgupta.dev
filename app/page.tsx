@@ -1,7 +1,13 @@
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import LoadingScreen from "@/components/LoadingScreen";
-import SecondSection from "@/components/SecondSection";
+import LoadingScreen from "@/components/layout/LoadingScreen";
+import Navbar from "@/components/layout/Navbar";
+import Hero from "@/components/sections/Hero";
+import Gallery from "@/components/sections/Gallery";
+import Story from "@/components/sections/Story";
+import Numbers from "@/components/sections/Numbers";
+import Works from "@/components/sections/Works";
+import Journey from "@/components/sections/Journey";
+import Toolbox from "@/components/sections/Toolbox";
+import Contact from "@/components/sections/Contact";
 
 export default function Home() {
   return (
@@ -9,7 +15,13 @@ export default function Home() {
       <LoadingScreen />
       <Navbar />
       <Hero />
-      <SecondSection />
+      <Gallery />
+      <Story />
+      <Numbers />
+      <Works />
+      <Journey />
+      <Toolbox />
+      <Contact />
     </main>
   );
 }

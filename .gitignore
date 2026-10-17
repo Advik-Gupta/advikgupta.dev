@@ -1,6 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
 /node_modules
 /.pnp
 .pnp.*
@@ -10,33 +7,52 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
 /coverage
 
-# next.js
 /.next/
 /out/
 
-# production
 /build
 
-# misc
 .DS_Store
 *.pem
-CLAUDE.md
 
-# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
-# vercel
 .vercel
 
-# typescript
 *.tsbuildinfo
 next-env.d.ts
+
+public/file.svg
+public/globe.svg
+public/next.svg
+public/robots.txt
+public/sitemap.xml
+public/vercel.svg
+public/window.svg
+
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
+GEMINI.md
+.claude/
+.cursor/
+.cursorrules
+.cursorignore
+.windsurf/
+.windsurfrules
+.codex/
+.gemini/
+.aider*
+.continue/
+.copilot/
+.github/copilot-instructions.md
+.planning/
+.mcp.json

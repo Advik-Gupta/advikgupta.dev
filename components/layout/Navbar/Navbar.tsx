@@ -1,58 +1,60 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { lockScroll, scrollToId, unlockScroll } from "@/lib/scroll";
+import { EMAIL, NAV_LINKS, SOCIALS } from "@/lib/site";
+import ResumeButton from "@/components/ui/ResumeButton";
+import "./Navbar.css";
 
-const links = ["Home", "Works", "About", "Contact"];
+const EASE = [0.76, 0, 0.24, 1] as const;
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (open) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
-    return () => { document.body.style.overflow = ""; };
+    if (!open) return;
+    lockScroll();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      unlockScroll();
+    };
   }, [open]);
+
+  const go = (id: string) => {
+    setOpen(false);
+    requestAnimationFrame(() => scrollToId(id));
+  };
 
   return (
     <>
-      <header
-        style={{
-          position: "fixed",
-          top: "1.5rem",
-          right: "1.5rem",
-          zIndex: 999,
-        }}
-      >
+      <header className={`nav ${open ? "is-open" : ""}`}>
         <button
           onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-          className="flex flex-col justify-center items-end gap-[6px] w-8 h-8 cursor-pointer group"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          className="nav__toggle"
+          data-cursor="grow"
         >
           <motion.span
-            animate={open ? { rotate: 45, y: 9, width: "100%" } : { rotate: 0, y: 0, width: "100%" }}
-            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
-            className="block h-[2px] bg-[#0a0a0a] origin-center"
-            style={{ width: "28px" }}
+            animate={open ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.4, ease: EASE }}
+            className="nav__bar"
+            style={{ width: 28 }}
           />
           <motion.span
             animate={open ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
             transition={{ duration: 0.2 }}
-            className="block h-[2px] bg-[#0a0a0a]"
-            style={{ width: "20px" }}
+            className="nav__bar"
+            style={{ width: 20 }}
           />
           <motion.span
-            animate={open ? { rotate: -45, y: -9, width: "100%" } : { rotate: 0, y: 0, width: "100%" }}
-            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
-            className="block h-[2px] bg-[#0a0a0a] origin-center"
-            style={{ width: "28px" }}
+            animate={open ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.4, ease: EASE }}
+            className="nav__bar"
+            style={{ width: 28 }}
           />
         </button>
       </header>
@@ -60,31 +62,71 @@ export default function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-40 flex items-center justify-center"
-            style={{ backgroundColor: "#0a0a0a" }}
-            onClick={() => setOpen(false)}
+            className="nav__overlay"
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            exit={{ clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.8, ease: EASE }}
           >
-            <nav className="flex flex-col items-center gap-6">
-              {links.map((link, i) => (
-                <motion.a
-                  key={link}
-                  href={`#${link.toLowerCase()}`}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ delay: i * 0.07 + 0.1, duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-                  onClick={() => setOpen(false)}
-                  className="text-[#F2EDE4] uppercase tracking-widest text-4xl md:text-6xl hover:opacity-40 transition-opacity duration-200"
-                  style={{ fontFamily: "var(--font-oswald)", fontWeight: 300 }}
-                >
-                  {link}
-                </motion.a>
+            <nav className="nav__links" aria-label="Main">
+              {NAV_LINKS.map((link, i) => (
+                <div key={link.id} className="nav__mask">
+                  <motion.a
+                    href={`#${link.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      go(link.id);
+                    }}
+                    initial={{ y: "110%" }}
+                    animate={{ y: 0 }}
+                    exit={{ y: "-110%" }}
+                    transition={{
+                      delay: i * 0.05 + 0.25,
+                      duration: 0.8,
+                      ease: EASE,
+                    }}
+                    className="nav__link"
+                    data-cursor="grow"
+                  >
+                    <span className="nav__index">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="nav__text">{link.label}</span>
+                  </motion.a>
+                </div>
               ))}
             </nav>
+
+            <motion.div
+              className="nav__foot"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.6, duration: 0.6, ease: EASE }}
+            >
+              <ResumeButton tone="dark" />
+              <div className="nav__socials">
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="link-line"
+                  data-cursor="grow"
+                >
+                  Email
+                </a>
+                {SOCIALS.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link-line"
+                    data-cursor="grow"
+                  >
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

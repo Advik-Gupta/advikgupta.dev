@@ -12,8 +12,6 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
   --gutter: clamp(1.25rem, 4vw, 3rem);
-  --font-bebas: "Bebas Neue", "Anton", "Oswald", system-ui, sans-serif;
-  --font-oswald: "Oswald", system-ui, sans-serif;
 }
 
 *,

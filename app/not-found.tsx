@@ -3,12 +3,12 @@ import Link from "next/link";
 import "./not-found.css";
 
 export const metadata: Metadata = {
-  title: "Wrong exit · Advik Gupta",
+  title: "Page not found",
 };
 
 export default function NotFound() {
   return (
-    <main className="lost">
+    <main id="main" className="lost">
       <div className="lost__body">
         <span className="lost__badge">Error 404</span>
         <h1 className="lost__title display">
@@ -23,11 +23,18 @@ export default function NotFound() {
             Take me home
           </Link>
           <Link
-            href="/#journey"
+            href="/blog"
             className="lost__ghost link-line"
             data-cursor="grow"
           >
-            See the actual journey
+            Read the blog
+          </Link>
+          <Link
+            href="/contact"
+            className="lost__ghost link-line"
+            data-cursor="grow"
+          >
+            Contact me
           </Link>
         </div>
       </div>

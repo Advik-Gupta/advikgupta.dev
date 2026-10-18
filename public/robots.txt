@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://advikgupta.dev/sitemap.xml

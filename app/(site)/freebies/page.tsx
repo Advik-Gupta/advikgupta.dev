@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { readFileSync } from "node:fs";
 import { basename, join } from "node:path";
 import Link from "next/link";
@@ -12,12 +12,12 @@ import StackCardsExample from "@/components/freebies/StackCards/Example";
 import { highlight } from "@/lib/highlight";
 import "./freebies.css";
 
-export const metadata: Metadata = {
-  title: "Freebies · Advik Gupta",
+export const metadata = pageMetadata({
+  title: "Freebies",
   description:
-    "Free React components from advikgupta.dev. Preview them live, copy the code or download the files.",
-  alternates: { canonical: "/freebies" },
-};
+    "Free React components from advikgupta.dev. Preview them live, copy the code or download the files for your own projects.",
+  path: "/freebies",
+});
 
 const EXAMPLES: Record<string, React.ComponentType> = {
   "road-journey": RoadJourneyExample,
@@ -39,7 +39,7 @@ export default function FreebiesPage() {
   }));
 
   return (
-    <main className="freebies">
+    <main id="main" className="freebies">
       <header className="freebies__hero">
         <Link href="/" className="freebies__back link-line" data-cursor="grow">
           ← Back home

@@ -1,9 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Doto, JetBrains_Mono, Oswald } from "next/font/google";
-import CustomCursor from "@/components/layout/CustomCursor";
-import SmoothScroll from "@/components/layout/SmoothScroll";
 import Navbar from "@/components/layout/Navbar";
-import { EMAIL, SOCIALS } from "@/lib/site";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_TITLE,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -31,38 +35,34 @@ const mono = JetBrains_Mono({
   preload: false,
 });
 
-const TITLE = "Advik Gupta";
-const DESCRIPTION =
-  "Advik Gupta is a full-stack developer and electronics engineering student at VIT Vellore. Go, Next.js, PostgreSQL, and the occasional biosensor.";
-
 export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  keywords: [
-    "Advik Gupta",
-    "full-stack developer",
-    "Go developer",
-    "Next.js",
-    "VIT Vellore",
-    "CodeChef-VIT",
-    "portfolio",
-  ],
-  authors: [{ name: "Advik Gupta" }],
-  creator: "Advik Gupta",
-  robots: { index: true, follow: true },
-  metadataBase: new URL("https://advikgupta.dev"),
-  alternates: { canonical: "/" },
+  metadataBase: new URL(SITE_URL),
+  title: { default: DEFAULT_TITLE, template: "%s | Advik Gupta" },
+  description: DEFAULT_DESCRIPTION,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  alternates: {
+    types: {
+      "application/rss+xml": [
+        { url: "/blog/rss.xml", title: "Advik Gupta – Blog" },
+      ],
+    },
+  },
   openGraph: {
     type: "website",
-    url: "https://advikgupta.dev",
-    title: TITLE,
-    description: DESCRIPTION,
-    siteName: "Advik Gupta",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [
+      { url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: SITE_NAME },
+    ],
   },
   twitter: {
-    card: "summary",
-    title: TITLE,
-    description: DESCRIPTION,
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 
@@ -83,36 +83,9 @@ export default function RootLayout({
       className={`${bebasNeue.variable} ${oswald.variable} ${doto.variable} ${mono.variable} antialiased`}
     >
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Advik Gupta",
-              url: "https://advikgupta.dev",
-              email: `mailto:${EMAIL}`,
-              jobTitle: "Full-Stack Developer",
-              description: DESCRIPTION,
-              alumniOf: {
-                "@type": "CollegeOrUniversity",
-                name: "Vellore Institute of Technology",
-              },
-              sameAs: SOCIALS.map((s) => s.href),
-              knowsAbout: [
-                "Go",
-                "Next.js",
-                "React",
-                "PostgreSQL",
-                "Redis",
-                "System Design",
-                "Application Security",
-              ],
-            }),
-          }}
-        />
-        <SmoothScroll />
-        <CustomCursor />
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
         <Navbar />
         {children}
       </body>

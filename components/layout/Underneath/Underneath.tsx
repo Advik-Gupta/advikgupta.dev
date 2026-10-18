@@ -146,7 +146,6 @@ export default function Underneath() {
         <span className="xray-toggle__label">
           {loading ? "Scanning…" : open ? "Put it back" : "Look underneath"}
         </span>
-        <span className="xray-toggle__dot" aria-hidden="true" />
       </button>
 
       {scanning && <div className="xray-scan" aria-hidden="true" />}
@@ -154,7 +153,6 @@ export default function Underneath() {
       {open && (
         <>
           <div className="xray-hud" aria-hidden="true">
-            <span className="xray-hud__live" />
             <span>X-ray</span>
             <span className="xray-hud__sep">/</span>
             <span>{rendered.length} modules</span>

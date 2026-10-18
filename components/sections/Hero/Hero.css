@@ -101,31 +101,6 @@
   gap: 0.6rem;
 }
 
-.hero__pulse {
-  position: relative;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.hero__pulse::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-@keyframes ping {
-  75%,
-  100% {
-    transform: scale(2.8);
-    opacity: 0;
-  }
-}
-
 .hero__resume {
   color: #111;
   font-weight: 500;

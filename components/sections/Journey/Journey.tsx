@@ -170,33 +170,13 @@ export default function Journey() {
           gsap.utils
             .toArray<HTMLElement>(".journey__card")
             .forEach((card, i) => {
-              const side = i % 2 === 0 ? -1 : 1;
-              gsap
-                .timeline({
-                  scrollTrigger: {
-                    trigger: card,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: 0.5,
-                  },
-                })
-                .fromTo(
-                  card,
-                  { xPercent: side * 70, rotation: side * -4 },
-                  {
-                    xPercent: 0,
-                    rotation: 0,
-                    ease: "power2.out",
-                    duration: 0.42,
-                  },
-                )
-                .to(card, { duration: 0.16 })
-                .to(card, {
-                  xPercent: side * 70,
-                  rotation: side * 4,
-                  ease: "power2.in",
-                  duration: 0.42,
-                });
+              gsap.from(card, {
+                x: i % 2 === 0 ? -40 : 40,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                scrollTrigger: { trigger: card, start: "top 88%", once: true },
+              });
             });
         },
       );
@@ -221,6 +201,7 @@ export default function Journey() {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    const touch = window.matchMedia("(pointer: coarse)").matches;
     const items = Array.from(stopsRef.current?.children ?? []) as HTMLElement[];
     const markers = Array.from(
       el.querySelectorAll<SVGCircleElement>(".journey__marker"),
@@ -240,12 +221,7 @@ export default function Journey() {
     let seg = -1;
     let reached = -1;
     let launched = false;
-    let top = 0;
     let frame = 0;
-
-    const measureTop = () => {
-      top = el.getBoundingClientRect().top + window.scrollY;
-    };
 
     const indexAtY = (y: number) => {
       if (y <= track.y[0]) return 0;
@@ -307,7 +283,7 @@ export default function Journey() {
       frame = 0;
       const raw = reduce
         ? parkY
-        : window.innerHeight * 0.62 - (top - window.scrollY);
+        : window.innerHeight * 0.62 - el.getBoundingClientRect().top;
       const f = indexAtY(Math.min(parkY, raw));
       const i = Math.floor(f);
       const j = Math.min(N, i + 1);
@@ -336,7 +312,7 @@ export default function Journey() {
       let scale = 1;
       let launch = 0;
 
-      if (stage === 3 && raw > parkY && !reduce) {
+      if (stage === 3 && raw > parkY && !reduce && !touch) {
         const extra = raw - parkY;
         launch = clamp01(extra / 160);
         const e = 1 - Math.pow(1 - launch, 3);
@@ -375,7 +351,7 @@ export default function Journey() {
       }
     };
 
-    const desktop = window.matchMedia("(pointer: fine)").matches;
+    const desktop = !touch;
     const schedule = () => {
       if (desktop) {
         update();
@@ -384,7 +360,6 @@ export default function Journey() {
       if (!frame) frame = requestAnimationFrame(update);
     };
 
-    measureTop();
     update();
     const st = ScrollTrigger.create({
       trigger: el,
@@ -392,7 +367,6 @@ export default function Journey() {
       end: "bottom top-=600",
       onUpdate: schedule,
       onRefresh: () => {
-        measureTop();
         schedule();
       },
     });

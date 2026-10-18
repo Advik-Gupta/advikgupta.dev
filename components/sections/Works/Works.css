@@ -258,3 +258,16 @@
     justify-content: center;
   }
 }
+
+.works__more {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.works__more-link {
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}

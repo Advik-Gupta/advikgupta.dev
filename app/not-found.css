@@ -20,21 +20,6 @@
   color: var(--accent-deep);
 }
 
-.lost__badge::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: lost-blink 1.2s steps(2) infinite;
-}
-
-@keyframes lost-blink {
-  50% {
-    opacity: 0.2;
-  }
-}
-
 .lost__title {
   margin-top: 1rem;
   font-size: clamp(4.5rem, 14vw, 14rem);

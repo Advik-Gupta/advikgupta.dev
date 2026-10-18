@@ -1,16 +1,13 @@
-import type { Metadata } from "next";
-import ComingSoon from "@/components/ui/ComingSoon";
+import BlogListing, { BLOG_DESCRIPTION } from "@/components/blog/BlogListing";
+import { getAllPosts } from "@/lib/blog";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Blog · Advik Gupta",
-  alternates: { canonical: "/blog" },
-};
+export const metadata = pageMetadata({
+  title: "Blog",
+  description: BLOG_DESCRIPTION,
+  path: "/blog",
+});
 
 export default function Page() {
-  return (
-    <ComingSoon
-      title="Blog"
-      line="Notes on building things: backends, frontends and everything in between. First posts are on the way."
-    />
-  );
+  return <BlogListing all={getAllPosts()} page={1} />;
 }

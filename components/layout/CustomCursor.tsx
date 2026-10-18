@@ -23,6 +23,7 @@ export default function CustomCursor() {
 
   useEffect(() => {
     if (!enabled) return;
+    document.documentElement.classList.add("has-cursor");
 
     const move = (e: MouseEvent) => {
       mouseX.set(e.clientX);
@@ -40,6 +41,7 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mousedown", press);
       window.removeEventListener("mouseup", release);
+      document.documentElement.classList.remove("has-cursor");
     };
   }, [enabled, mouseX, mouseY]);
 

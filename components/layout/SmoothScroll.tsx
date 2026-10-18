@@ -9,21 +9,28 @@ export default function SmoothScroll() {
   useEffect(() => {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
+    ScrollTrigger.config({ ignoreMobileResize: true });
 
+    const touch = window.matchMedia("(pointer: coarse)").matches;
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const lenis = new Lenis({
-      autoRaf: false,
-      lerp: reduce ? 1 : 0.1,
-      wheelMultiplier: 1,
-    });
-    setLenis(lenis);
-    lenis.on("scroll", ScrollTrigger.update);
 
-    const tick = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
+    let lenis: Lenis | null = null;
+    let tick: ((time: number) => void) | null = null;
+    if (!touch) {
+      const instance = new Lenis({
+        autoRaf: false,
+        lerp: reduce ? 1 : 0.1,
+        wheelMultiplier: 1,
+      });
+      lenis = instance;
+      setLenis(instance);
+      instance.on("scroll", ScrollTrigger.update);
+      tick = (time: number) => instance.raf(time * 1000);
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+    }
 
     const off = onLoaded(() => {
       unlockScroll();
@@ -42,8 +49,8 @@ export default function SmoothScroll() {
     return () => {
       off();
       window.removeEventListener("resize", onResize);
-      gsap.ticker.remove(tick);
-      lenis.destroy();
+      if (tick) gsap.ticker.remove(tick);
+      lenis?.destroy();
       setLenis(null);
     };
   }, []);

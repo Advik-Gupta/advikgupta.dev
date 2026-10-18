@@ -21,4 +21,5 @@ export const PAGE_LINKS = [
   { label: "Projects", href: "/projects" },
   { label: "Hackathons", href: "/hackathons" },
   { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];

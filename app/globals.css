@@ -38,12 +38,32 @@ html.is-locked body {
   overflow: hidden;
 }
 
-@media (pointer: fine) {
-  *,
-  *::before,
-  *::after {
-    cursor: none !important;
-  }
+html.has-cursor,
+html.has-cursor *,
+html.has-cursor *::before,
+html.has-cursor *::after {
+  cursor: none !important;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100000;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  background: #111;
+  color: var(--bg);
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: none;
 }
 
 a {

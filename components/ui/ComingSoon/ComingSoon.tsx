@@ -8,7 +8,7 @@ type Props = {
 
 export default function ComingSoon({ title, line }: Props) {
   return (
-    <main className="soon">
+    <main id="main" className="soon">
       <Link href="/" className="soon__back link-line" data-cursor="grow">
         ← Back home
       </Link>
@@ -17,14 +17,10 @@ export default function ComingSoon({ title, line }: Props) {
         <h1 className="soon__title display">{title}</h1>
         <p className="soon__line">{line}</p>
         <div className="soon__actions">
-          <Link
-            href="/freebies"
-            className="soon__cta soon__cta--desktop"
-            data-cursor="grow"
-          >
-            Grab some freebies meanwhile ↗
+          <Link href="/projects" className="soon__cta" data-cursor="grow">
+            See my projects
           </Link>
-          <Link href="/" className="soon__ghost" data-cursor="grow">
+          <Link href="/" className="soon__ghost link-line" data-cursor="grow">
             Back to the main site
           </Link>
         </div>

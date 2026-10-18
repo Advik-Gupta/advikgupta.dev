@@ -1,0 +1,186 @@
+.sa {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sa__sheet {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #fbf8f2;
+  box-shadow: 0 20px 50px rgba(17, 17, 17, 0.25);
+  will-change: transform, clip-path;
+}
+
+.sa__lines {
+  position: absolute;
+  inset: 12% 10%;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(17, 17, 17, 0.18) 0 3px,
+    transparent 3px 22px
+  );
+}
+
+.sa__crease {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(17, 17, 17, 0.25),
+    rgba(17, 17, 17, 0.05)
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.sa__caption {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(2rem, 6vh, 4rem);
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  color: #111;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.sa__phone {
+  position: absolute;
+  right: clamp(1.5rem, 8vw, 8rem);
+  bottom: clamp(-3rem, -4vh, -1rem);
+  width: clamp(200px, 20vw, 260px);
+  aspect-ratio: 9 / 18.5;
+  padding: 10px;
+  border-radius: 42px;
+  background: #111;
+  box-shadow:
+    0 40px 80px rgba(17, 17, 17, 0.35),
+    inset 0 0 0 2px #333;
+}
+
+.sa__screen {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 33px;
+  background:
+    radial-gradient(circle at 30% 20%, #ff9a5c, transparent 55%),
+    radial-gradient(circle at 80% 90%, #c94f12, transparent 60%), #ff7a2c;
+  color: #fff;
+  text-align: center;
+}
+
+.sa__notch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 34%;
+  height: 22px;
+  border-radius: 999px;
+  background: #111;
+  transform: translateX(-50%);
+}
+
+.sa__time {
+  display: block;
+  margin-top: 22%;
+  font-family: var(--font-bebas), sans-serif;
+  font-size: clamp(3.4rem, 5vw, 4.4rem);
+  line-height: 1;
+}
+
+.sa__date {
+  display: block;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+
+.sa__note {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 48%;
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 18px;
+  background: rgba(251, 248, 242, 0.92);
+  color: #111;
+  text-align: left;
+  opacity: 0;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.2);
+}
+
+.sa__app {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #111;
+  color: #ff7a2c;
+  font-family: var(--font-bebas), sans-serif;
+  font-size: 1.2rem;
+}
+
+.sa__note-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.sa__note-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  color: #555;
+}
+
+.sa__note-head b {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sa__note-head i {
+  font-style: normal;
+}
+
+.sa__note-title {
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.sa__note-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: #333;
+}
+
+@media (max-width: 640px) {
+  .sa__phone {
+    right: 50%;
+    width: 190px;
+    margin-right: -95px;
+  }
+
+  .sa__caption {
+    top: 18vh;
+    bottom: auto;
+  }
+}

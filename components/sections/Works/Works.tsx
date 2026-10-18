@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
 import ArrowIcon from "@/components/ui/ArrowIcon";
 import { PROJECTS } from "./projects";
@@ -134,6 +135,15 @@ export default function Works() {
             </div>
           </article>
         ))}
+      </div>
+      <div className="works__more">
+        <Link
+          href="/projects"
+          className="works__more-link link-line"
+          data-cursor="grow"
+        >
+          See all projects →
+        </Link>
       </div>
     </section>
   );

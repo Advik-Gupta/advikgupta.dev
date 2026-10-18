@@ -1,4 +1,5 @@
 .journey {
+  overflow: clip;
   padding: clamp(5rem, 10vw, 8rem) var(--gutter) 0;
 }
 
@@ -101,10 +102,6 @@
   top: -25px;
   overflow: visible;
   filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25));
-}
-
-.journey__road {
-  contain: strict;
 }
 
 .journey__poof {

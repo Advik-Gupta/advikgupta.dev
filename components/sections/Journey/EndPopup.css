@@ -70,21 +70,6 @@
   color: var(--accent);
 }
 
-.end-pop__badge::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: end-pop-blink 1.2s steps(2) infinite;
-}
-
-@keyframes end-pop-blink {
-  50% {
-    opacity: 0.2;
-  }
-}
-
 .end-pop__title {
   margin-top: 0.7rem;
   font-size: clamp(2.2rem, 4vw, 3rem);

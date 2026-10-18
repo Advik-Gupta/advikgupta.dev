@@ -25,7 +25,7 @@ export default function Gallery() {
             secondText=") don't just build websites."
             mediaUrl="/assets/advik.jpeg"
             mediaType="image"
-            alt="Advik"
+            alt="Advik Gupta"
             triggerType="hover"
             animationVariants={HOVER_VARIANTS}
             className="section-text__line section-text__line--left"
@@ -38,7 +38,7 @@ export default function Gallery() {
             secondText=") experiences"
             mediaUrl="/assets/brands.JPG"
             mediaType="image"
-            alt="telephone"
+            alt="A power socket hanging from the ceiling of a cafe"
             triggerType="hover"
             animationVariants={HOVER_VARIANTS}
             className="section-text__line section-text__line--right"

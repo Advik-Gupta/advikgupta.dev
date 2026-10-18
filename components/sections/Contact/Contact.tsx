@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { scrollToId } from "@/lib/scroll";
 import { EMAIL, RESUME_URL, SOCIALS } from "@/lib/site";
@@ -99,6 +100,13 @@ export default function Contact() {
         <div className="contact__bar">
           <span>© {new Date().getFullYear()} Advik Gupta</span>
           <VelloreTime />
+          <Link
+            href="/blog"
+            className="contact__top link-line"
+            data-cursor="grow"
+          >
+            Blog
+          </Link>
           <button
             type="button"
             className="contact__top link-line"

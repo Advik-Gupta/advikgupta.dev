@@ -8,12 +8,24 @@ import Works from "@/components/sections/Works";
 import Journey from "@/components/sections/Journey";
 import Explore from "@/components/sections/Explore";
 import Toolbox from "@/components/sections/Toolbox";
+import WorkTogether from "@/components/sections/WorkTogether";
 import Contact from "@/components/sections/Contact";
+import JsonLd from "@/components/ui/JsonLd";
+import { homeGraph } from "@/lib/jsonld";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: DEFAULT_TITLE,
+  absoluteTitle: true,
+  description: DEFAULT_DESCRIPTION,
+  path: "/",
+});
 
 export default function Home() {
   return (
     <>
-      <main style={{ backgroundColor: "#ede8df" }}>
+      <JsonLd data={homeGraph()} />
+      <main id="main" style={{ backgroundColor: "#ede8df" }}>
         <LoadingScreen />
         <Hero />
         <Gallery />
@@ -23,6 +35,7 @@ export default function Home() {
         <Journey />
         <Explore />
         <Toolbox />
+        <WorkTogether />
         <Contact />
       </main>
       <Underneath />

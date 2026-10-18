@@ -1,0 +1,325 @@
+.cf {
+  min-height: 100vh;
+  padding: clamp(5rem, 9vw, 7rem) var(--gutter) clamp(4rem, 8vw, 6rem);
+}
+
+.cf__back {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cf__head {
+  margin-top: 1.5rem;
+  padding-bottom: clamp(2rem, 4vw, 3rem);
+  border-bottom: 1.5px solid #111;
+}
+
+.cf__title {
+  font-size: clamp(4rem, 12vw, 12rem);
+  line-height: 0.84;
+}
+
+.cf__mask {
+  display: inline-block;
+  clip-path: inset(-0.3em -0.3em 0 -0.3em);
+  vertical-align: top;
+}
+
+.cf__title-in {
+  display: inline-block;
+}
+
+.cf__intro {
+  margin-top: 1.2rem;
+  max-width: 44ch;
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1.55;
+  color: #333;
+}
+
+.cf__letter {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.4rem, 3vw, 2.2rem);
+  max-width: 68rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.5rem, 3vw, 2.6rem);
+  line-height: 1.5;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.cf__letter.is-flying {
+  visibility: hidden;
+}
+
+.cf__type span {
+  opacity: 0;
+  animation: cf-char 0.01s linear forwards;
+}
+
+@keyframes cf-char {
+  to {
+    opacity: 1;
+  }
+}
+
+.cf__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em 0.4em;
+}
+
+.cf__line--chips {
+  align-items: center;
+}
+
+.cf__line--chips .cf__chips {
+  align-self: auto;
+}
+
+.cf__line--block {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.cf__field {
+  min-width: 0;
+  width: 9em;
+  padding: 0 0.1em;
+  border: none;
+  border-bottom: 2px solid #111;
+  background: transparent;
+  font: inherit;
+  font-weight: 400;
+  color: #111;
+  outline: none;
+  transition: border-color 0.3s var(--ease-out);
+}
+
+.cf__select {
+  width: 8.5em;
+  appearance: none;
+  padding-right: 1.1em;
+  background:
+    linear-gradient(45deg, transparent 50%, #111 50%) right 0.45em center /
+      0.3em 0.3em no-repeat,
+    linear-gradient(-45deg, transparent 50%, #111 50%) right 0.15em center /
+      0.3em 0.3em no-repeat;
+  cursor: pointer;
+}
+
+.cf__select:invalid,
+.cf__select:has(option[value=""]:checked) {
+  color: #8a8680;
+  font-weight: 300;
+}
+
+.cf__select option {
+  font-size: 1rem;
+  color: #111;
+}
+
+.cf__field--wide {
+  width: 11em;
+}
+
+.cf__field::placeholder,
+.cf__area::placeholder {
+  color: #8a8680;
+  font-weight: 300;
+}
+
+.cf__field:focus,
+.cf__area:focus {
+  border-color: var(--accent);
+}
+
+.cf__chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-self: center;
+}
+
+.cf__chip {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1.5px #111;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  transition:
+    background 0.25s var(--ease-out),
+    color 0.25s var(--ease-out),
+    transform 0.25s var(--ease-out);
+}
+
+.cf__chip:hover {
+  background: rgba(17, 17, 17, 0.06);
+}
+
+.cf__chip.is-on {
+  background: #111;
+  color: var(--bg);
+  transform: rotate(-2deg);
+}
+
+.cf__chip:active {
+  transform: scale(0.95);
+}
+
+.cf__area {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 1rem 1.2rem;
+  border: 1.5px solid #111;
+  border-radius: 1rem;
+  background: #f6f2ea;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.55;
+  color: #111;
+  resize: vertical;
+  outline: none;
+}
+
+.cf__submit {
+  align-items: center;
+  gap: 1.2rem 2rem;
+  margin-top: 0.5rem;
+}
+
+.cf__send {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  height: 3.6rem;
+  padding: 0 1.8rem;
+  border-radius: 999px;
+  background: #111;
+  color: var(--bg);
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition:
+    background 0.3s var(--ease-out),
+    color 0.3s var(--ease-out);
+}
+
+.cf__send:hover {
+  background: var(--accent);
+  color: #111;
+}
+
+.cf__plane {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.cf__send:hover .cf__plane {
+  transform: translate(3px, -3px) rotate(-8deg);
+}
+
+.cf__alt {
+  font-size: 1rem;
+  color: #444;
+}
+
+.cf__alt a {
+  color: #a1400b;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.cf__done {
+  max-width: 44rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: 1.5rem;
+  background: #111;
+  color: var(--bg);
+  animation: cf-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes cf-pop {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotate(-2deg);
+  }
+}
+
+.cf__done-title {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 0.9;
+  color: var(--accent);
+}
+
+.cf__done-text {
+  margin-top: 0.8rem;
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: 1.15rem;
+  line-height: 1.55;
+  color: #c9c4bb;
+}
+
+.cf__done-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.cf__done .cf__send {
+  background: var(--accent);
+  color: #111;
+}
+
+.cf__again {
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bg);
+}
+
+@media (max-width: 640px) {
+  .cf__letter {
+    font-size: 1.35rem;
+  }
+
+  .cf__field,
+  .cf__field--wide {
+    width: 100%;
+  }
+
+  .cf__chips {
+    align-self: flex-start;
+  }
+
+  .cf__send {
+    width: 100%;
+    justify-content: center;
+  }
+}

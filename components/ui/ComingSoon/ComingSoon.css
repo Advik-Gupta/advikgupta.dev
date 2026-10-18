@@ -9,6 +9,8 @@
 }
 
 .soon__back {
+  position: relative;
+  z-index: 2;
   align-self: flex-start;
   font-family: var(--font-oswald), sans-serif;
   font-size: 0.78rem;
@@ -23,13 +25,10 @@
   flex-direction: column;
   justify-content: center;
   gap: 1.2rem;
-  padding: 3rem 0 8rem;
+  padding: 3rem 0 9rem;
 }
 
 .soon__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
   font-family: var(--font-oswald), sans-serif;
   font-size: 0.78rem;
   letter-spacing: 0.26em;
@@ -37,23 +36,8 @@
   color: var(--accent-deep);
 }
 
-.soon__badge::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: soon-blink 1.2s steps(2) infinite;
-}
-
-@keyframes soon-blink {
-  50% {
-    opacity: 0.2;
-  }
-}
-
 .soon__title {
-  font-size: clamp(5rem, 18vw, 18rem);
+  font-size: clamp(4.5rem, 16vw, 16rem);
   line-height: 0.82;
 }
 
@@ -70,7 +54,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.25rem 1.6rem;
   margin-top: 0.6rem;
 }
 
@@ -102,7 +86,7 @@
   font-size: 0.8rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #444;
 }
 
 .soon__tape {
@@ -139,8 +123,8 @@
   }
 }
 
-@media (max-width: 760px) {
-  .soon__cta--desktop {
-    display: none;
+@media (prefers-reduced-motion: reduce) {
+  .soon__tape span {
+    animation: none;
   }
 }

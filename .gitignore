@@ -33,8 +33,6 @@ next-env.d.ts
 public/file.svg
 public/globe.svg
 public/next.svg
-public/robots.txt
-public/sitemap.xml
 public/vercel.svg
 public/window.svg
 

@@ -151,10 +151,7 @@ export default function Hero() {
 
       <div className="hero__bar-wrap">
         <div className="hero__bar">
-          <span className="hero__bar-item hero__fade">
-            <span className="hero__pulse" aria-hidden="true" />
-            20, India
-          </span>
+          <span className="hero__bar-item hero__fade">20, India</span>
           {RESUME_URL ? (
             <a
               href={RESUME_URL}

@@ -1,0 +1,438 @@
+.hk {
+  min-height: 100vh;
+  padding: clamp(5rem, 9vw, 7rem) var(--gutter) clamp(4rem, 8vw, 6rem);
+  overflow-x: clip;
+}
+
+.hk__back {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hk__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 24rem);
+  align-items: end;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.hk__title {
+  font-size: clamp(4.5rem, 14.5vw, 15rem);
+  line-height: 0.82;
+}
+
+.hk__mask {
+  display: inline-block;
+  clip-path: inset(-0.3em -0.3em 0 -0.3em);
+  vertical-align: top;
+}
+
+.hk__title-in {
+  display: inline-block;
+}
+
+.hk__intro {
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.55;
+  color: #333;
+}
+
+.hk__board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(2rem, 4vw, 3rem);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(rgba(255, 122, 44, 0.1) 1px, transparent 1.6px) 0 0 / 7px
+      7px,
+    #0c0c0c;
+  box-shadow:
+    inset 0 0 0 1px rgba(237, 232, 223, 0.08),
+    0 20px 40px rgba(17, 17, 17, 0.15);
+  overflow: hidden;
+}
+
+.hk__score {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: clamp(1.2rem, 2.6vw, 2rem);
+}
+
+.hk__score + .hk__score {
+  border-left: 1px dashed rgba(237, 232, 223, 0.12);
+}
+
+.hk__score-value {
+  font-family: var(--font-dot), var(--font-mono), monospace;
+  font-size: clamp(3.4rem, 7.5vw, 7rem);
+  font-weight: 700;
+  line-height: 0.9;
+  color: var(--accent);
+  text-shadow:
+    0 0 18px rgba(255, 122, 44, 0.55),
+    0 0 2px rgba(255, 190, 140, 0.9);
+  animation: hk-flicker 6s steps(1) infinite;
+}
+
+.hk__score:nth-child(2) .hk__score-value {
+  animation-delay: -2s;
+}
+
+.hk__score:nth-child(3) .hk__score-value {
+  animation-delay: -4s;
+}
+
+@keyframes hk-flicker {
+  0%,
+  96%,
+  100% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0.55;
+  }
+  98% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 0.7;
+  }
+}
+
+.hk__score.is-ph .hk__score-value {
+  color: rgba(255, 122, 44, 0.35);
+  text-shadow: none;
+}
+
+.hk__score-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #a19d96;
+}
+
+.hk__score-label i {
+  font-style: normal;
+  padding: 0.1rem 0.5rem;
+  border: 1px dashed rgba(255, 122, 44, 0.6);
+  border-radius: 999px;
+  font-size: 0.6rem;
+  color: var(--accent);
+}
+
+.hk__rail-wrap {
+  position: relative;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding-bottom: 2rem;
+}
+
+.hk__rail {
+  position: relative;
+  z-index: 2;
+  height: 18px;
+  margin: 0 calc(var(--gutter) * -0.5);
+  border-radius: 9px;
+  background: linear-gradient(
+    180deg,
+    #5a5a5a 0%,
+    #2b2b2b 45%,
+    #161616 55%,
+    #3a3a3a 100%
+  );
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.hk__bolt {
+  position: absolute;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ddd, #777);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hk__bolt:first-child {
+  left: 10px;
+}
+
+.hk__bolt:last-child {
+  right: 10px;
+}
+
+.hk__hangs {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-top: -9px;
+}
+
+.hk__hang {
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+.hk__sway {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: 50% 0;
+  animation: hk-sway 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes hk-sway {
+  from {
+    transform: rotate(-1.4deg);
+  }
+  to {
+    transform: rotate(1.4deg);
+  }
+}
+
+.hk__strap {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: var(--strap, 10rem);
+  overflow: hidden;
+  background: var(--accent);
+  box-shadow:
+    inset 3px 0 0 rgba(0, 0, 0, 0.12),
+    inset -3px 0 0 rgba(0, 0, 0, 0.12);
+}
+
+.hk__strap span {
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: #111;
+}
+
+.hk__strap--ghost {
+  background: transparent;
+  box-shadow: none;
+  border-left: 1.5px dashed rgba(17, 17, 17, 0.35);
+  border-right: 1.5px dashed rgba(17, 17, 17, 0.35);
+}
+
+.hk__clip {
+  position: relative;
+  z-index: 1;
+  width: 34px;
+  height: 22px;
+  margin-top: -2px;
+  border-radius: 6px 6px 10px 10px;
+  background: linear-gradient(180deg, #e2e2e2, #8c8c8c);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 #fff;
+}
+
+.hk__badge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: clamp(15rem, 19vw, 18rem);
+  margin-top: -8px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #f6f2ea;
+  color: #111;
+  text-align: left;
+  box-shadow:
+    0 24px 44px rgba(17, 17, 17, 0.2),
+    inset 0 0 0 1.5px #111;
+  transition: box-shadow 0.4s var(--ease-out);
+}
+
+@media (hover: hover) {
+  button.hk__badge:hover {
+    box-shadow:
+      0 30px 60px rgba(17, 17, 17, 0.28),
+      inset 0 0 0 2px var(--accent);
+  }
+
+  button.hk__badge:hover .hk__cta {
+    letter-spacing: 0.26em;
+  }
+}
+
+.hk__slot {
+  display: block;
+  width: 46px;
+  height: 10px;
+  margin: 14px auto 0;
+  border-radius: 6px;
+  background: var(--bg);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.35);
+}
+
+.hk__band {
+  display: block;
+  margin-top: 0.8rem;
+  padding: 0.65rem 1.1rem;
+  background: #111;
+  color: var(--bg);
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hk__badge-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.1rem 1.1rem 1rem;
+}
+
+.hk__role {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #777;
+}
+
+.hk__project {
+  font-size: clamp(2.4rem, 3.4vw, 3.2rem);
+  line-height: 0.9;
+}
+
+.hk__year {
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.hk__stamp {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  padding: 0.15rem 0.55rem 0.05rem;
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  font-family: var(--font-bebas), sans-serif;
+  font-size: 1.35rem;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  transform: rotate(-12deg);
+  mix-blend-mode: multiply;
+}
+
+.hk__cta {
+  margin-top: 0.6rem;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  transition: letter-spacing 0.4s var(--ease-out);
+}
+
+.hk__barcode {
+  display: block;
+  height: 26px;
+  margin: 0 1.1rem 1.1rem;
+  background: repeating-linear-gradient(
+    90deg,
+    #111 0 2px,
+    transparent 2px 4px,
+    #111 4px 5px,
+    transparent 5px 8px,
+    #111 8px 11px,
+    transparent 11px 13px
+  );
+  opacity: 0.85;
+}
+
+.hk__badge--ghost {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px rgba(17, 17, 17, 0.3);
+  opacity: 0.6;
+}
+
+.hk__badge--ghost .hk__slot {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px rgba(17, 17, 17, 0.3);
+}
+
+.hk__badge--ghost .hk__project {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #111;
+}
+
+@media (max-width: 900px) {
+  .hk__head {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .hk__board {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hk__score:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .hk__score + .hk__score {
+    border-left: none;
+    border-top: 1px dashed rgba(237, 232, 223, 0.12);
+  }
+
+  .hk__score:nth-child(3) {
+    border-left: 1px dashed rgba(237, 232, 223, 0.12);
+  }
+
+  .hk__hangs {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .hk__sway {
+    animation: none;
+  }
+
+  .hk__strap {
+    height: 3.5rem;
+  }
+
+  .hk__badge {
+    width: min(86vw, 22rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hk__sway,
+  .hk__score-value {
+    animation: none;
+  }
+}

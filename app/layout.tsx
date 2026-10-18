@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, Doto, JetBrains_Mono, Oswald } from "next/font/google";
+import localFont from "next/font/local";
 import Navbar from "@/components/layout/Navbar";
 import {
   DEFAULT_DESCRIPTION,
@@ -10,28 +10,29 @@ import {
 } from "@/lib/seo";
 import "./globals.css";
 
-const bebasNeue = Bebas_Neue({
+const bebasNeue = localFont({
+  src: "./fonts/bebas-neue-400.woff2",
   weight: "400",
   variable: "--font-bebas",
-  subsets: ["latin"],
 });
 
-const oswald = Oswald({
-  weight: ["300", "400", "500"],
+const oswald = localFont({
+  src: "./fonts/oswald-variable.woff2",
+  weight: "300 500",
   variable: "--font-oswald",
-  subsets: ["latin"],
 });
 
-const doto = Doto({
-  weight: ["700"],
+const doto = localFont({
+  src: "./fonts/doto-700.woff2",
+  weight: "700",
   variable: "--font-dot",
-  subsets: ["latin"],
   preload: false,
 });
 
-const mono = JetBrains_Mono({
+const mono = localFont({
+  src: "./fonts/jetbrains-mono-variable.woff2",
+  weight: "100 800",
   variable: "--font-mono",
-  subsets: ["latin"],
   preload: false,
 });
 

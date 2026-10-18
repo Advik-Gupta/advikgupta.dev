@@ -323,3 +323,22 @@
     justify-content: center;
   }
 }
+
+.cf__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.cf__error {
+  width: 100%;
+  padding: 0.8rem 1.1rem;
+  border-radius: 0.8rem;
+  background: rgba(196, 43, 28, 0.08);
+  box-shadow: inset 0 0 0 1.5px #b3261e;
+  color: #8c1d16;
+  font-size: 1rem;
+  font-weight: 400;
+}

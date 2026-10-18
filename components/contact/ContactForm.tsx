@@ -75,6 +75,9 @@ export default function ContactForm() {
   const form = useRef<HTMLFormElement>(null);
   const [sent, setSent] = useState(false);
   const [flight, setFlight] = useState<Sent | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
+  const request = useRef<Promise<string | null>>(Promise.resolve(null));
   const [email, setEmail] = useState("");
   const local = email.split("@")[0];
   const typedDomain = email.includes("@") ? email.split("@")[1] : "";
@@ -108,22 +111,45 @@ export default function ContactForm() {
     { scope: root },
   );
 
+  const send = async (payload: Record<string, unknown>) => {
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) return null;
+      const data = await res.json().catch(() => ({}));
+      return (data as { error?: string }).error ?? "Something went wrong.";
+    } catch {
+      return "Couldn't reach the server. Check your connection and try again.";
+    }
+  };
+
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = Object.fromEntries(
       new FormData(e.currentTarget).entries(),
     ) as Record<string, string>;
-    const payload = { ...data, needs, timeline: timeline[0] ?? "" };
-    console.log(payload);
+    setError(null);
+    setSending(true);
+    request.current = send({ ...data, needs, timeline: timeline[0] ?? "" });
     const rect = e.currentTarget.getBoundingClientRect();
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setSent(true);
+      landed();
       return;
     }
     setFlight({ rect, name: data.name ?? "", message: data.message ?? "" });
   };
 
-  const landed = () => {
+  const landed = async () => {
+    const failure = await request.current;
+    setSending(false);
+    setFlight(null);
+    if (failure) {
+      setError(failure);
+      return;
+    }
     setSent(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -182,9 +208,17 @@ export default function ContactForm() {
       ) : (
         <form
           ref={form}
-          className={`cf__letter ${flight ? "is-flying" : ""}`}
+          className={`cf__letter ${sending ? "is-flying" : ""}`}
           onSubmit={submit}
         >
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            className="cf__trap"
+            aria-hidden="true"
+          />
           <p className="cf__line">
             Hi Advik, I&apos;m{" "}
             <input
@@ -287,7 +321,7 @@ export default function ContactForm() {
             <button
               type="submit"
               className="cf__send"
-              disabled={!!flight}
+              disabled={sending}
               data-cursor="grow"
             >
               <span>Send it</span>
@@ -296,6 +330,11 @@ export default function ContactForm() {
                 <path d="m11.3 13.7 4-4" />
               </svg>
             </button>
+            {error && (
+              <p className="cf__error" role="alert">
+                {error}
+              </p>
+            )}
             <p className="cf__alt">
               Prefer email? <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
               {SOCIALS.map((s) => (

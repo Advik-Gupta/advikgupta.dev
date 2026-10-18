@@ -10,15 +10,22 @@ import "./Projects.css";
 
 type Props = {
   projects: Project[];
-  upcoming: number;
+  initialSlug?: string;
 };
 
-type Open = { project: Project; index: number; origin: DOMRect | null };
+type Open = { project: Project; origin: DOMRect | null };
 
-export default function ProjectsIndex({ projects, upcoming }: Props) {
+const slugFromPath = (path: string) =>
+  path.match(/^\/projects\/([^/]+)\/?$/)?.[1] ?? null;
+
+export default function ProjectsIndex({ projects, initialSlug }: Props) {
   const root = useRef<HTMLElement>(null);
-  const [open, setOpen] = useState<Open | null>(null);
+  const initial = projects.find((p) => p.slug === initialSlug);
+  const [open, setOpen] = useState<Open | null>(
+    initial ? { project: initial, origin: null } : null,
+  );
   const [closing, setClosing] = useState(false);
+  const primary = !!initialSlug && open?.project.slug === initialSlug;
 
   useGSAP(
     () => {
@@ -31,7 +38,7 @@ export default function ProjectsIndex({ projects, upcoming }: Props) {
           stagger: 0.08,
           delay: 0.1,
         });
-        gsap.from(".pj__card, .pj__ghost", {
+        gsap.from(".pj__card", {
           y: 40,
           opacity: 0,
           duration: 1,
@@ -62,47 +69,38 @@ export default function ProjectsIndex({ projects, upcoming }: Props) {
 
   const show = useCallback(
     (project: Project, origin: DOMRect | null, push: boolean) => {
-      const index = projects.findIndex((p) => p.slug === project.slug);
       setClosing(false);
-      setOpen({ project, index, origin });
-      if (push)
-        window.history.pushState({ p: project.slug }, "", `?p=${project.slug}`);
+      setOpen({ project, origin });
+      if (push) window.history.pushState(null, "", `/projects/${project.slug}`);
     },
-    [projects],
+    [],
   );
 
   useEffect(() => {
-    const slug = new URLSearchParams(window.location.search).get("p");
-    const match = projects.find((p) => p.slug === slug);
-    const frame = requestAnimationFrame(() => {
-      if (match) show(match, null, false);
-    });
-
     const onPop = () => {
-      const p = new URLSearchParams(window.location.search).get("p");
-      const next = projects.find((x) => x.slug === p);
+      const slug = slugFromPath(window.location.pathname);
+      const next = projects.find((p) => p.slug === slug);
       if (next) show(next, null, false);
       else setClosing(true);
     };
     window.addEventListener("popstate", onPop);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("popstate", onPop);
-    };
+    return () => window.removeEventListener("popstate", onPop);
   }, [projects, show]);
 
   const requestClose = useCallback(() => {
-    if (window.history.state?.p) window.history.back();
-    else {
-      window.history.replaceState(null, "", window.location.pathname);
-      setClosing(true);
-    }
+    window.history.pushState(null, "", "/projects");
+    setClosing(true);
   }, []);
 
   const closed = useCallback(() => {
     setOpen(null);
     setClosing(false);
   }, []);
+
+  const Heading = open && primary ? "p" : "h1";
+  const index = open
+    ? projects.findIndex((p) => p.slug === open.project.slug)
+    : 0;
 
   return (
     <main id="main" className="pj" ref={root}>
@@ -111,49 +109,49 @@ export default function ProjectsIndex({ projects, upcoming }: Props) {
       </Link>
 
       <header className="pj__head">
-        <h1 className="pj__heading display">
+        <Heading className="pj__heading display">
           <span className="pj__mask">
             <span className="pj__title-in">Projects</span>
           </span>
           <sup className="pj__count">
             ({String(projects.length).padStart(2, "0")})
           </sup>
-        </h1>
+        </Heading>
         <p className="pj__intro">
-          Things I&apos;ve built, broken and rebuilt. Click one to open it up.
-          More are being written up right now.
+          Things I&apos;ve built: a platform thousands of VIT students rely on
+          every exam season, a training app and a hackathon-winning developer
+          tool. Open one to see the full story.
         </p>
       </header>
 
       <ul className="pj__grid">
         {projects.map((p, i) => (
           <li key={p.slug}>
-            <button
-              type="button"
+            <a
+              href={`/projects/${p.slug}`}
               className="pj__card"
-              onClick={(e) =>
-                show(p, e.currentTarget.getBoundingClientRect(), true)
-              }
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+                e.preventDefault();
+                show(p, e.currentTarget.getBoundingClientRect(), true);
+              }}
               onPointerMove={tilt}
               onPointerLeave={untilt}
               data-cursor="grow"
             >
               <span className="pj__media">
-                {p.cover ? (
-                  <Image
-                    src={p.cover}
-                    alt=""
-                    fill
-                    sizes="(max-width: 760px) 92vw, (max-width: 1100px) 46vw, 31vw"
-                  />
-                ) : (
-                  <span className="pj__media-ph">Cover image</span>
-                )}
+                <Image
+                  src={p.cover}
+                  alt={p.coverAlt}
+                  fill
+                  sizes="(max-width: 760px) 92vw, (max-width: 1100px) 46vw, 31vw"
+                  priority={i === 0}
+                />
                 <span className="pj__year">{p.year}</span>
               </span>
               <span className="pj__body">
                 <span className="pj__num">
-                  {String(i + 1).padStart(2, "0")}
+                  {String(i + 1).padStart(2, "0")} · {p.category}
                 </span>
                 <span className="pj__name display">
                   <span className="pj__mask">
@@ -174,29 +172,19 @@ export default function ProjectsIndex({ projects, upcoming }: Props) {
                   </span>
                 </span>
               </span>
-            </button>
-          </li>
-        ))}
-        {Array.from({ length: upcoming }, (_, i) => (
-          <li key={`ghost-${i}`} className="pj__ghost" aria-hidden="true">
-            <span className="pj__media pj__media--ghost">
-              <span className="pj__media-ph">In the works</span>
-            </span>
-            <span className="pj__body">
-              <span className="pj__num">
-                {String(projects.length + i + 1).padStart(2, "0")}
-              </span>
-              <span className="pj__name display">Coming soon</span>
-              <span className="pj__hook">Being written up right now.</span>
-            </span>
+            </a>
           </li>
         ))}
       </ul>
 
       {open && (
         <ProjectDetail
+          key={open.project.slug}
           project={open.project}
-          index={open.index}
+          index={index}
+          next={projects[(index + 1) % projects.length]}
+          primary={primary}
+          onNext={(p) => show(p, null, true)}
           origin={open.origin}
           closing={closing}
           onRequestClose={requestClose}

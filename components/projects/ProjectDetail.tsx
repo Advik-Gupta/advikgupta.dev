@@ -10,21 +10,14 @@ import "./ProjectDetail.css";
 type Props = {
   project: Project;
   index: number;
+  next: Project;
+  primary: boolean;
+  onNext: (project: Project) => void;
   origin: DOMRect | null;
   closing: boolean;
   onRequestClose: () => void;
   onClosed: () => void;
 };
-
-function Text({ value }: { value: string }) {
-  if (!value.startsWith("Placeholder")) return <>{value}</>;
-  return (
-    <span className="pd__ph">
-      <span className="pd__ph-tag">To fill</span>
-      {value.replace(/^Placeholder:?\s*/, "")}
-    </span>
-  );
-}
 
 const clipFrom = (r: DOMRect) =>
   `inset(${r.top}px ${window.innerWidth - r.right}px ${window.innerHeight - r.bottom}px ${r.left}px round 18px)`;
@@ -32,6 +25,9 @@ const clipFrom = (r: DOMRect) =>
 export default function ProjectDetail({
   project,
   index,
+  next,
+  primary,
+  onNext,
   origin,
   closing,
   onRequestClose,
@@ -158,6 +154,8 @@ export default function ProjectDetail({
   }, [closing, origin]);
 
   const words = project.title.split(" ");
+  const Title = primary ? "h1" : "h2";
+  const Label = primary ? "h2" : "h3";
 
   return (
     <div
@@ -168,7 +166,7 @@ export default function ProjectDetail({
       aria-label={project.title}
     >
       <div className="pd__scroll" ref={scroller} data-lenis-prevent>
-        <div className="pd__inner">
+        <article className="pd__inner">
           <header className="pd__bar">
             <span className="pd__crumb">
               Projects <span>/</span> {String(index + 1).padStart(2, "0")}
@@ -188,15 +186,15 @@ export default function ProjectDetail({
 
           <section className="pd__hero">
             <p className="pd__eyebrow pd-reveal">
-              {project.year} · {project.role}
+              {project.year} · {project.category}
             </p>
-            <h2 className="pd__title display">
+            <Title className="pd__title display">
               {words.map((w, i) => (
                 <span key={i} className="pd__word">
                   <span className="pd__word-in">{w}</span>
                 </span>
               ))}
-            </h2>
+            </Title>
             <p className="pd__hook pd-reveal">{project.hook}</p>
 
             <dl className="pd__meta pd-reveal">
@@ -232,33 +230,30 @@ export default function ProjectDetail({
           </section>
 
           <figure className="pd__cover pd-reveal">
-            {project.cover ? (
-              <Image
-                src={project.cover}
-                alt={`${project.title} screenshot`}
-                fill
-                sizes="(max-width: 760px) 100vw, 90vw"
-                className="pd__cover-img"
-                priority
-              />
-            ) : (
-              <span className="pd__placeholder">Cover image</span>
-            )}
+            <Image
+              src={project.cover}
+              alt={project.coverAlt}
+              fill
+              sizes="(max-width: 760px) 100vw, 90vw"
+              className="pd__cover-img"
+              priority
+            />
           </figure>
 
           <section className="pd__block pd-reveal">
-            <h3 className="pd__label">Overview</h3>
-            <p className="pd__lead">
-              <Text value={project.summary} />
-            </p>
+            <Label className="pd__label">Overview</Label>
+            <div className="pd__prose">
+              {project.overview.map((para, i) => (
+                <p key={i} className={i === 0 ? "pd__lead" : "pd__body"}>
+                  {para}
+                </p>
+              ))}
+            </div>
           </section>
 
-          <section className="pd__stats pd-reveal">
-            {project.stats.map((s, i) => (
-              <div
-                key={i}
-                className={`pd__stat ${s.label.startsWith("Placeholder") ? "is-ph" : ""}`}
-              >
+          <section className="pd__stats pd-reveal" aria-label="Key numbers">
+            {project.stats.map((s) => (
+              <div key={s.label} className="pd__stat">
                 <span className="pd__stat-value display">{s.value}</span>
                 <span className="pd__stat-label">{s.label}</span>
               </div>
@@ -266,44 +261,35 @@ export default function ProjectDetail({
           </section>
 
           <section className="pd__block pd-reveal">
-            <h3 className="pd__label">My contribution</h3>
+            <Label className="pd__label">{project.contributionTitle}</Label>
             <ol className="pd__list">
               {project.contribution.map((c, i) => (
                 <li key={i}>
                   <span className="pd__list-num">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <p>
-                    <Text value={c} />
-                  </p>
+                  <p>{c}</p>
                 </li>
               ))}
             </ol>
           </section>
 
           <section className="pd__gallery-wrap pd-reveal">
-            <h3 className="pd__label">Gallery</h3>
+            <Label className="pd__label">Gallery</Label>
             <div className="pd__gallery">
-              {project.gallery.map((g, i) => (
-                <figure key={i} className={`pd__shot pd__shot--${g.shape}`}>
+              {project.gallery.map((g) => (
+                <figure key={g.src} className={`pd__shot pd__shot--${g.shape}`}>
                   <div className="pd__frame">
-                    {g.src ? (
-                      <Image
-                        src={g.src}
-                        alt={g.caption}
-                        fill
-                        sizes="(max-width: 760px) 80vw, 45vw"
-                      />
-                    ) : (
-                      <span className="pd__placeholder">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                          <rect x="3" y="4" width="18" height="16" rx="2" />
-                          <circle cx="9" cy="10" r="2" />
-                          <path d="m21 16-5-5-9 9" />
-                        </svg>
-                        Add screenshot
-                      </span>
-                    )}
+                    <Image
+                      src={g.src}
+                      alt={g.alt}
+                      fill
+                      sizes={
+                        g.shape === "full"
+                          ? "(max-width: 760px) 80vw, 90vw"
+                          : "(max-width: 760px) 80vw, 45vw"
+                      }
+                    />
                   </div>
                   <figcaption>{g.caption}</figcaption>
                 </figure>
@@ -311,16 +297,32 @@ export default function ProjectDetail({
             </div>
           </section>
 
-          <section className="pd__block pd-reveal">
-            <h3 className="pd__label">Challenges & learnings</h3>
-            <p className="pd__body">
-              <Text value={project.learnings} />
-            </p>
-          </section>
+          {project.challenges && (
+            <section className="pd__block pd-reveal">
+              <Label className="pd__label">Challenges</Label>
+              <div className="pd__prose">
+                {project.challenges.map((para, i) => (
+                  <p key={i} className="pd__body">
+                    {para}
+                  </p>
+                ))}
+              </div>
+            </section>
+          )}
 
           <footer className="pd__next pd-reveal">
             <span className="pd__next-label">Next project</span>
-            <span className="pd__next-title display">Coming soon</span>
+            <a
+              href={`/projects/${next.slug}`}
+              className="pd__next-title display"
+              onClick={(e) => {
+                e.preventDefault();
+                onNext(next);
+              }}
+              data-cursor="grow"
+            >
+              {next.title} →
+            </a>
             <button
               type="button"
               className="pd__back"
@@ -330,7 +332,7 @@ export default function ProjectDetail({
               ← All projects
             </button>
           </footer>
-        </div>
+        </article>
       </div>
     </div>
   );

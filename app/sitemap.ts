@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { CATEGORIES, getAllPosts, pageCount } from "@/lib/blog";
+import { PROJECTS } from "@/components/projects/data";
 import { absolute } from "@/lib/seo";
 
 const STATIC_PAGES: { path: string; lastModified: string }[] = [
   { path: "/", lastModified: "2026-10-18" },
-  { path: "/projects", lastModified: "2026-10-18" },
+  { path: "/projects", lastModified: "2026-10-19" },
   { path: "/contact", lastModified: "2026-10-18" },
   { path: "/freebies", lastModified: "2026-10-18" },
 ];
@@ -36,6 +37,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...STATIC_PAGES.map((p) => ({
       url: absolute(p.path),
       lastModified: p.lastModified,
+    })),
+    ...PROJECTS.map((p) => ({
+      url: absolute(`/projects/${p.slug}`),
+      lastModified: "2026-10-19",
     })),
     ...blogPages,
     ...categories,

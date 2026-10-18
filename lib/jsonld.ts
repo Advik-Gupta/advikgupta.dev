@@ -160,3 +160,71 @@ export function collectionGraph(category: {
     ],
   };
 }
+
+type ProjectLd = {
+  slug: string;
+  title: string;
+  description: string;
+  year: string;
+  applicationCategory: string;
+  cover: string;
+  stack: string[];
+  links: { label: string; href: string }[];
+};
+
+export function projectGraph(project: ProjectLd) {
+  const url = absolute(`/projects/${project.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": `${url}#project`,
+        name: project.title,
+        description: project.description,
+        url,
+        image: absolute(project.cover),
+        applicationCategory: project.applicationCategory,
+        operatingSystem: "Web",
+        dateCreated: project.year,
+        keywords: project.stack.join(", "),
+        sameAs: project.links.map((l) => l.href),
+        creator: { "@id": PERSON_ID },
+      },
+      breadcrumbList([
+        { name: "Home", path: "/" },
+        { name: "Projects", path: "/projects" },
+        { name: project.title },
+      ]),
+    ],
+  };
+}
+
+export function projectsGraph(
+  projects: { slug: string; title: string; description: string }[],
+) {
+  const url = absolute("/projects");
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${url}#collection`,
+        url,
+        name: "Projects by Advik Gupta",
+        isPartOf: { "@id": WEBSITE_ID },
+        author: { "@id": PERSON_ID },
+        mainEntity: {
+          "@type": "ItemList",
+          itemListElement: projects.map((p, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            url: absolute(`/projects/${p.slug}`),
+            name: p.title,
+          })),
+        },
+      },
+      breadcrumbList([{ name: "Home", path: "/" }, { name: "Projects" }]),
+    ],
+  };
+}

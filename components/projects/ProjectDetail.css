@@ -175,38 +175,6 @@
   will-change: transform;
 }
 
-.pd__placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  border: 1.5px dashed rgba(237, 232, 223, 0.25);
-  border-radius: inherit;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(237, 232, 223, 0.03) 0 12px,
-    transparent 12px 24px
-  );
-  font-family: var(--font-oswald), sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #8a8680;
-}
-
-.pd__placeholder svg {
-  width: 2rem;
-  height: 2rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
 .pd__block {
   display: grid;
   grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
@@ -238,23 +206,6 @@
   color: #d4cfc6;
 }
 
-.pd__ph {
-  color: #8a8680;
-}
-
-.pd__ph-tag {
-  display: inline-block;
-  margin-right: 0.6em;
-  padding: 0.15em 0.55em;
-  border: 1px dashed rgba(255, 122, 44, 0.6);
-  border-radius: 999px;
-  font-size: 0.55em;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  vertical-align: middle;
-  color: var(--accent);
-}
-
 .pd__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -276,12 +227,6 @@
 .pd__stat:first-child {
   background: var(--accent);
   color: #111;
-}
-
-.pd__stat.is-ph {
-  background: transparent;
-  border: 1.5px dashed rgba(237, 232, 223, 0.22);
-  color: #8a8680;
 }
 
 .pd__stat-value {
@@ -366,13 +311,7 @@
 }
 
 .pd__shot--wide .pd__frame {
-  aspect-ratio: auto;
-  height: 100%;
-  min-height: 14rem;
-}
-
-.pd__shot--square {
-  grid-column: span 2;
+  aspect-ratio: 2 / 1;
 }
 
 .pd__shot--tall {
@@ -383,6 +322,19 @@
 .pd__shot--tall .pd__frame {
   flex: 1;
   aspect-ratio: auto;
+}
+
+.pd__shot--full {
+  grid-column: span 6;
+}
+
+.pd__shot--full .pd__frame,
+.pd__shot--half .pd__frame {
+  aspect-ratio: 3 / 2;
+}
+
+.pd__shot--half {
+  grid-column: span 3;
 }
 
 .pd__shot figcaption {
@@ -416,6 +368,7 @@
 .pd__next-title {
   font-size: clamp(3rem, 8vw, 8rem);
   line-height: 0.86;
+  transition: color 0.35s var(--ease-out);
   color: transparent;
   -webkit-text-stroke: 1.5px rgba(237, 232, 223, 0.5);
 }
@@ -501,8 +454,23 @@
 
   .pd__shot .pd__frame {
     flex: none;
-    height: auto;
+    height: 15rem;
     min-height: 0;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: auto;
+  }
+
+  .pd__shot--tall {
+    flex-basis: 8.5rem;
+  }
+}
+
+.pd__prose > * + * {
+  margin-top: 1rem;
+}
+
+@media (hover: hover) {
+  .pd__next-title:hover {
+    color: var(--accent);
+    -webkit-text-stroke-color: var(--accent);
   }
 }

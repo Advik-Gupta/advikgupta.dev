@@ -14,10 +14,10 @@ export const PROJECTS: Project[] = [
     year: "2025",
     hook: "Two million visits and counting.",
     story:
-      "Where VIT students go for past exam papers. I rebuilt the admin side around roles, audit logs and moderation, and taught Gemini to read paper metadata so nobody has to do it by hand.",
+      "Where 40,000+ VIT students find past exam papers. I worked heavily on the admin portal and restructured the Gemini pipeline that reads every uploaded paper, so 2,000+ papers stay organised without anyone tagging them by hand.",
     tags: ["Next.js", "MongoDB", "Gemini API"],
     links: [
-      { label: "Live", href: "https://papers.codechefvit.com" },
+      { label: "Live", href: "https://www.papers.codechefvit.com/" },
       { label: "Repo", href: "https://github.com/CodeChefVIT/papers-codechef" },
     ],
     tone: "ink",
@@ -53,9 +53,9 @@ export const PROJECTS: Project[] = [
   {
     title: "Blast Radius",
     year: "2026",
-    hook: "Know how far a change reaches before you make it.",
+    hook: "Third place at the hackathon.",
     story:
-      "A VS Code extension that maps every function's callers with tree-sitter, scores its risk from fan-in, coverage, churn and bus factor, and draws the whole call graph as a Pokédex. No AI, fully deterministic.",
+      "Maps every function in a repository so new developers can explore huge codebases fast, with a DevOps view, schema explorer and Git backups in one retro, game-inspired interface. Built in a single hackathon.",
     tags: ["TypeScript", "tree-sitter", "D3", "VS Code API"],
     links: [
       { label: "Repo", href: "https://github.com/Advik-Gupta/blast-radius" },

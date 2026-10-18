@@ -1,4 +1,4 @@
-const SITE_URL = "https://advikgupta.dev";
+const SITE_URL = "https://www.advikgupta.dev";
 const key = process.env.INDEXNOW_KEY;
 
 if (!key) {

@@ -1,4 +1,4 @@
-export const SITE_URL = "https://advikgupta.dev";
+export const SITE_URL = "https://www.advikgupta.dev";
 export const SITE_NAME = "Advik Gupta";
 export const DEFAULT_TITLE = "Advik Gupta – Freelance Full-Stack Web Developer";
 export const DEFAULT_DESCRIPTION =

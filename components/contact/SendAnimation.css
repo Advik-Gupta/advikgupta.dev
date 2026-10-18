@@ -1,6 +1,10 @@
 .sa {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100dvh;
   z-index: 2000;
   pointer-events: none;
   overflow: hidden;
@@ -53,8 +57,8 @@
 .sa__phone {
   position: absolute;
   right: clamp(1.5rem, 8vw, 8rem);
-  bottom: clamp(-3rem, -4vh, -1rem);
-  width: clamp(200px, 20vw, 260px);
+  bottom: clamp(1.5rem, 6vh, 3.5rem);
+  width: min(clamp(200px, 20vw, 260px), calc((100dvh - 10rem) * 9 / 18.5));
   aspect-ratio: 9 / 18.5;
   padding: 10px;
   border-radius: 42px;
@@ -150,12 +154,17 @@
 }
 
 .sa__note-head b {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .sa__note-head i {
+  flex-shrink: 0;
   font-style: normal;
 }
 
@@ -175,12 +184,16 @@
 @media (max-width: 640px) {
   .sa__phone {
     right: 50%;
-    width: 190px;
-    margin-right: -95px;
+    bottom: max(
+      calc(2.5rem + env(safe-area-inset-bottom)),
+      calc((100dvh - 350px) / 2 - 1.5rem)
+    );
+    width: min(170px, calc((100dvh - 14rem) * 9 / 18.5));
+    translate: 50% 0;
   }
 
   .sa__caption {
-    top: 18vh;
+    top: 4.5rem;
     bottom: auto;
   }
 }

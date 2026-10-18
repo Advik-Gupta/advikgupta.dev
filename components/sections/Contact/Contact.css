@@ -135,6 +135,7 @@
 }
 
 .contact__footer {
+  container-type: inline-size;
   padding: 0 var(--gutter);
 }
 
@@ -169,10 +170,9 @@
 .contact__giant {
   display: flex;
   justify-content: space-between;
-  font-size: clamp(4rem, 21.5vw, 24rem);
+  font-size: min(25.8cqi, 26rem);
   line-height: 0.78;
   color: var(--bg);
-  margin: 0 -0.01em;
   padding-top: 0.06em;
   white-space: nowrap;
   user-select: none;
@@ -221,9 +221,5 @@
   .contact__bar > :first-child {
     order: 3;
     width: 100%;
-  }
-
-  .contact__giant {
-    font-size: 23vw;
   }
 }

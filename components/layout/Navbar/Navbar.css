@@ -34,14 +34,19 @@
 
 .nav__overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100dvh;
   z-index: 999;
   background: #111;
   color: var(--bg);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: clamp(5rem, 12vh, 7rem) var(--gutter) clamp(1.5rem, 4vh, 2.5rem);
+  padding: clamp(5rem, 12vh, 7rem) var(--gutter)
+    calc(clamp(2rem, 5vh, 3rem) + env(safe-area-inset-bottom));
   overflow-y: auto;
 }
 
@@ -93,6 +98,7 @@
 }
 
 .nav__foot {
+  flex-shrink: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
